@@ -11,17 +11,13 @@
     <title>Dashboard - Smart Resource Booking</title>
 
     <link rel="stylesheet"
-          href="{{ url_for('static', filename='css/style.css', v='5') }}">
+          href="{{ url_for('static', filename='css/style.css', v='6') }}">
 
 </head>
 
 
 <body>
 
-
-<!-- =========================
-     Navigation Bar
-     ========================= -->
 
 <nav class="navbar">
 
@@ -56,41 +52,53 @@
 </nav>
 
 
-<!-- =========================
-     Main Dashboard
-     ========================= -->
-
 <main class="container">
 
 
-    <!-- Welcome -->
+    <!-- Application Introduction -->
 
     <section class="dashboard-header">
+
+        <span class="dashboard-kicker">
+            SMART RESOURCE BOOKING & ALLOCATION PLATFORM
+        </span>
 
         <h1>
             Welcome, {{ user.name }}
         </h1>
 
-        <p>
-            Manage and access shared institutional resources
-            through the Smart Resource Booking Platform.
-        </p>
+        {% if user.role == "ADMIN" %}
+
+            <p>
+                A centralized platform for managing institutional
+                resources, reviewing booking requests, controlling
+                availability, and ensuring efficient and transparent
+                allocation of shared facilities and equipment.
+            </p>
+
+        {% else %}
+
+            <p>
+                A centralized platform for discovering shared
+                institutional resources, submitting booking requests,
+                and tracking every request from submission through
+                approval, rejection, or cancellation.
+            </p>
+
+        {% endif %}
 
     </section>
 
 
-    <!-- =========================
-         Profile
-         ========================= -->
+    <!-- Profile -->
 
-    <div class="card">
+    <div class="card profile-card">
 
         <h2>
             Your Profile
         </h2>
 
         <div class="profile-grid">
-
 
             <div class="profile-item">
 
@@ -134,28 +142,26 @@
 
             </div>
 
-
         </div>
 
     </div>
 
 
-    <!-- =========================
-         ADMIN DASHBOARD
-         ========================= -->
+    <!-- Role-Based Workspace -->
 
     {% if user.role == "ADMIN" %}
 
-        <div class="card">
+        <div class="card dashboard-action-card">
 
             <h2>
-                Administrator Control Center
+                Administrator Workspace
             </h2>
 
             <p>
-                Manage institutional resources, monitor booking
-                activity, and control the allocation workflow
-                from the administrator interface.
+                Manage institutional resources and process booking
+                requests from a single administrative workspace.
+                Administrators control resource availability and
+                approve or reject user booking requests.
             </p>
 
 
@@ -172,44 +178,10 @@
                     Manage Booking Requests
                 </a>
 
-            </div>
 
-        </div>
-
-
-        <!-- =========================
-             ADMIN QUICK ACTIONS
-             ========================= -->
-
-        <div class="card">
-
-            <h2>
-                Administrative Actions
-            </h2>
-
-            <p>
-                Quickly access the most frequently used
-                administrative functions.
-            </p>
-
-
-            <div class="actions">
-
-                <a class="btn"
+                <a class="btn btn-success"
                    href="{{ url_for('resources.add_resource') }}">
                     Add Resource
-                </a>
-
-
-                <a class="btn btn-secondary"
-                   href="{{ url_for('resources.list_resources') }}">
-                    Resource Inventory
-                </a>
-
-
-                <a class="btn btn-danger"
-                   href="{{ url_for('auth.logout') }}">
-                    Logout
                 </a>
 
             </div>
@@ -220,53 +192,16 @@
     {% else %}
 
 
-    <!-- =========================
-         USER DASHBOARD
-         ========================= -->
-
-        <div class="card">
+        <div class="card dashboard-action-card">
 
             <h2>
-                User Dashboard
+                User Workspace
             </h2>
 
             <p>
-                Browse available resources and submit booking
-                requests according to your requirements.
-            </p>
-
-
-            <div class="actions">
-
-                <a class="btn"
-                   href="{{ url_for('resources.list_resources') }}">
-                    Browse Resources
-                </a>
-
-
-                <a class="btn btn-secondary"
-                   href="{{ url_for('bookings.list_bookings') }}">
-                    View My Bookings
-                </a>
-
-            </div>
-
-        </div>
-
-
-        <!-- =========================
-             USER QUICK ACTIONS
-             ========================= -->
-
-        <div class="card">
-
-            <h2>
-                Quick Actions
-            </h2>
-
-            <p>
-                Quickly access the most frequently used
-                features of the Smart Resource Booking Platform.
+                Browse available institutional resources, submit
+                booking requests, and track the progress of your
+                requests from one place.
             </p>
 
 
@@ -283,12 +218,6 @@
                     My Bookings
                 </a>
 
-
-                <a class="btn btn-danger"
-                   href="{{ url_for('auth.logout') }}">
-                    Logout
-                </a>
-
             </div>
 
         </div>
@@ -298,10 +227,6 @@
 
 </main>
 
-
-<!-- =========================
-     Footer
-     ========================= -->
 
 <footer class="footer">
 
