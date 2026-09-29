@@ -90,6 +90,67 @@
     </section>
 
 
+    <!-- Administrator Statistics -->
+
+    {% if user.role == "ADMIN" %}
+
+        <section class="dashboard-stats admin-stats">
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    &#9635;
+                </div>
+
+                <div class="stat-number">
+                    {{ resource_count }}
+                </div>
+
+                <div class="stat-label">
+                    Resources Registered
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    &#10003;
+                </div>
+
+                <div class="stat-number">
+                    {{ booked_count }}
+                </div>
+
+                <div class="stat-label">
+                    Booked
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    &#9719;
+                </div>
+
+                <div class="stat-number">
+                    {{ pending_count }}
+                </div>
+
+                <div class="stat-label">
+                    Pending Requests
+                </div>
+
+            </div>
+
+        </section>
+
+    {% endif %}
+
+
     <!-- Profile -->
 
     <div class="card profile-card">
