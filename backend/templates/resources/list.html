@@ -307,23 +307,27 @@
                         {% endif %}
 
 
-                        {% if resource.status == "AVAILABLE" %}
+                        {% if current_user.role != "ADMIN" %}
 
-                            <a href="{{ url_for(
-                                'bookings.create_booking',
-                                resource_id=resource.id
-                            ) }}"
-                               class="btn">
+                            {% if resource.status == "AVAILABLE" %}
 
-                                Book
+                                <a href="{{ url_for(
+                                    'bookings.create_booking',
+                                    resource_id=resource.id
+                                ) }}"
+                                   class="btn">
 
-                            </a>
+                                    Book
 
-                        {% else %}
+                                </a>
 
-                            <span class="badge badge-unavailable">
-                                Not Available
-                            </span>
+                            {% else %}
+
+                                <span class="badge badge-unavailable">
+                                    Not Available
+                                </span>
+
+                            {% endif %}
 
                         {% endif %}
 
