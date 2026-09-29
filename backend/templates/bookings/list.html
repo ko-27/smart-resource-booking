@@ -1,268 +1,485 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <title>My Bookings</title>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        {% if current_user.role == "ADMIN" %}
+            Booking Requests
+        {% else %}
+            My Bookings
+        {% endif %}
+        - Smart Resource Booking
+    </title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css', v='6') }}">
+
 </head>
+
 
 <body>
 
 
-{% if current_user.role == "ADMIN" %}
+<!-- =========================
+     Navigation
+     ========================= -->
 
-    <h1>All Resource Bookings</h1>
+<nav class="navbar">
 
-{% else %}
+    <div class="brand">
+        Smart Resource Booking
+    </div>
 
-    <h1>My Bookings</h1>
 
-{% endif %}
-<h2>Filter Bookings</h2>
+    <div class="nav-links">
 
-<form method="GET">
+        <a href="{{ url_for('dashboard') }}">
+            Dashboard
+        </a>
 
-    <select name="status">
 
-        <option value="">
-            All Status
-        </option>
+        <a href="{{ url_for('resources.list_resources') }}">
+            Resources
+        </a>
 
-        <option
-            value="PENDING"
-            {% if status_filter == "PENDING" %}
-                selected
+
+        <a href="{{ url_for('bookings.list_bookings') }}">
+
+            {% if current_user.role == "ADMIN" %}
+                Booking Requests
+            {% else %}
+                My Bookings
             {% endif %}
-        >
-            Pending
-        </option>
 
-        <option
-            value="BOOKED"
-            {% if status_filter == "BOOKED" %}
-                selected
+        </a>
+
+
+        <a href="{{ url_for('auth.logout') }}">
+            Logout
+        </a>
+
+    </div>
+
+</nav>
+
+
+<!-- =========================
+     Main Content
+     ========================= -->
+
+<main class="container">
+
+
+    <!-- Page Header -->
+
+    <section class="dashboard-header">
+
+        <h1>
+
+            {% if current_user.role == "ADMIN" %}
+                Booking Requests
+            {% else %}
+                My Bookings
             {% endif %}
-        >
-            Approved
-        </option>
 
-        <option
-            value="REJECTED"
-            {% if status_filter == "REJECTED" %}
-                selected
+        </h1>
+
+
+        <p>
+
+            {% if current_user.role == "ADMIN" %}
+
+                Review and manage resource booking requests
+                submitted by users.
+
+            {% else %}
+
+                View and manage your resource booking requests.
+
             {% endif %}
-        >
-            Rejected
-        </option>
 
-        <option
-            value="CANCELLED"
-            {% if status_filter == "CANCELLED" %}
-                selected
-            {% endif %}
-        >
-            Cancelled
-        </option>
+        </p>
 
-    </select>
-
-    <button type="submit">
-        Filter
-    </button>
-
-    <a href="{{ url_for('bookings.list_bookings') }}">
-        Clear
-    </a>
-
-</form>
-
-<br>
-
-{% with messages = get_flashed_messages(with_categories=true) %}
-
-    {% for category, message in messages %}
-
-        <p>{{ message }}</p>
-
-    {% endfor %}
-
-{% endwith %}
+    </section>
 
 
-<table border="1" cellpadding="8">
+    <!-- =========================
+         Filter Section
+         ========================= -->
 
-    <tr>
+    <div class="card">
 
-        <th>Booking ID</th>
-
-        {% if current_user.role == "ADMIN" %}
-
-            <th>Booked By</th>
-
-        {% endif %}
-
-        <th>Resource</th>
-        <th>Location</th>
-        <th>Date</th>
-        <th>Start</th>
-        <th>End</th>
-        <th>Purpose</th>
-        <th>Status</th>
-        <th>Action</th>
-
-    </tr>
+        <h2>
+            Filter Bookings
+        </h2>
 
 
-    {% for booking in bookings %}
+        <form method="GET" class="filter-form">
 
-    <tr>
+            <select name="status">
 
-        <td>
-            {{ booking.id }}
-        </td>
-
-
-        {% if current_user.role == "ADMIN" %}
-
-        <td>
-
-            {{ booking.user.name }}
-
-            <br>
-
-            {{ booking.user.email }}
-
-        </td>
-
-        {% endif %}
+                <option value="">
+                    All Status
+                </option>
 
 
-        <td>
-            {{ booking.resource.name }}
-        </td>
+                <option value="PENDING"
+                    {% if status == "PENDING" %}
+                        selected
+                    {% endif %}
+                >
+                    Pending
+                </option>
 
 
-        <td>
-            {{ booking.resource.location }}
-        </td>
+                <option value="BOOKED"
+                    {% if status == "BOOKED" %}
+                        selected
+                    {% endif %}
+                >
+                    Booked
+                </option>
 
 
-        <td>
-            {{ booking.booking_date }}
-        </td>
+                <option value="CANCELLED"
+                    {% if status == "CANCELLED" %}
+                        selected
+                    {% endif %}
+                >
+                    Cancelled
+                </option>
+
+            </select>
 
 
-        <td>
-            {{ booking.start_time }}
-        </td>
+            <button
+                type="submit"
+                class="btn"
+            >
+                Filter
+            </button>
 
 
-        <td>
-            {{ booking.end_time }}
-        </td>
-
-
-        <td>
-            {{ booking.purpose }}
-        </td>
-
-
-        <td>
-            {{ booking.status }}
-        </td>
-
-
-        <td>
-
-    {% if current_user.role == "ADMIN" %}
-
-        {% if booking.status == "PENDING" %}
-
-            <a href="{{ url_for(
-                'bookings.approve_booking',
-                booking_id=booking.id
-            ) }}">
-                Approve
+            <a
+                href="{{ url_for('bookings.list_bookings') }}"
+                class="btn btn-secondary"
+            >
+                Clear
             </a>
 
-            |
+        </form>
 
-            <a href="{{ url_for(
-                'bookings.reject_booking',
-                booking_id=booking.id
-            ) }}">
-                Reject
-            </a>
-
-        {% elif booking.status == "BOOKED" %}
-
-            <a href="{{ url_for(
-                'bookings.cancel_booking',
-                booking_id=booking.id
-            ) }}">
-                Cancel
-            </a>
-
-        {% else %}
-
-            -
-
-        {% endif %}
-
-    {% else %}
-
-        {% if booking.status == "PENDING" or booking.status == "BOOKED" %}
-
-            <a href="{{ url_for(
-                'bookings.cancel_booking',
-                booking_id=booking.id
-            ) }}">
-                Cancel
-            </a>
-
-        {% else %}
-
-            -
-
-        {% endif %}
-
-    {% endif %}
-
-    </td>
-
-    </tr>
+    </div>
 
 
-    {% else %}
+    <!-- =========================
+         Booking Table
+         ========================= -->
 
-    <tr>
+    <div class="card table-card">
 
-        <td colspan="10">
-            No bookings found.
-        </td>
+        <div class="table-wrapper">
 
-    </tr>
+            <table>
 
-    {% endfor %}
+                <thead>
 
-</table>
+                    <tr>
 
-
-<br>
-
-
-<p>
-    <a href="{{ url_for('resources.list_resources') }}">
-        Browse Resources
-    </a>
-</p>
+                        <th>
+                            Booking ID
+                        </th>
 
 
-<p>
-    <a href="{{ url_for('dashboard') }}">
-        Back to Dashboard
-    </a>
-</p>
+                        {% if current_user.role == "ADMIN" %}
 
+                            <th>
+                                Requested By
+                            </th>
+
+                        {% endif %}
+
+
+                        <th>
+                            Resource
+                        </th>
+
+                        <th>
+                            Location
+                        </th>
+
+                        <th>
+                            Date
+                        </th>
+
+                        <th>
+                            Start
+                        </th>
+
+                        <th>
+                            End
+                        </th>
+
+                        <th>
+                            Purpose
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                            Action
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for booking in bookings %}
+
+                    <tr>
+
+
+                        <td>
+                            #{{ booking.id }}
+                        </td>
+
+
+                        {% if current_user.role == "ADMIN" %}
+
+                            <td>
+                                {{ booking.user.name }}
+                                <br>
+                                <small>
+                                    {{ booking.user.email }}
+                                </small>
+                            </td>
+
+                        {% endif %}
+
+
+                        <td>
+                            {{ booking.resource.name }}
+                        </td>
+
+
+                        <td>
+                            {{ booking.resource.location }}
+                        </td>
+
+
+                        <td>
+                            {{ booking.booking_date }}
+                        </td>
+
+
+                        <td>
+                            {{ booking.start_time }}
+                        </td>
+
+
+                        <td>
+                            {{ booking.end_time }}
+                        </td>
+
+
+                        <td>
+                            {{ booking.purpose }}
+                        </td>
+
+
+                        <td>
+
+                            {% if booking.status == "BOOKED" %}
+
+                                <span class="badge badge-success">
+                                    BOOKED
+                                </span>
+
+                            {% elif booking.status == "PENDING" %}
+
+                                <span class="badge badge-warning">
+                                    PENDING
+                                </span>
+
+                            {% elif booking.status == "CANCELLED" %}
+
+                                <span class="badge badge-danger">
+                                    CANCELLED
+                                </span>
+
+                            {% else %}
+
+                                <span class="badge">
+                                    {{ booking.status }}
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <td>
+
+
+                            {% if current_user.role == "ADMIN" %}
+
+
+                                {% if booking.status == "PENDING" %}
+
+                                    <a
+                                        href="{{ url_for(
+                                            'bookings.approve_booking',
+                                            booking_id=booking.id
+                                        ) }}"
+                                        class="btn btn-small btn-success"
+                                    >
+                                        Approve
+                                    </a>
+
+
+                                    <a
+                                        href="{{ url_for(
+                                            'bookings.reject_booking',
+                                            booking_id=booking.id
+                                        ) }}"
+                                        class="btn btn-small btn-danger"
+                                    >
+                                        Reject
+                                    </a>
+
+                                {% else %}
+
+                                    <span>
+                                        —
+                                    </span>
+
+                                {% endif %}
+
+
+                            {% else %}
+
+
+                                {% if booking.status == "PENDING"
+                                      or booking.status == "BOOKED" %}
+
+                                    <a
+                                        href="{{ url_for(
+                                            'bookings.cancel_booking',
+                                            booking_id=booking.id
+                                        ) }}"
+                                        class="btn btn-small btn-danger"
+                                    >
+                                        Cancel
+                                    </a>
+
+                                {% else %}
+
+                                    <span>
+                                        —
+                                    </span>
+
+                                {% endif %}
+
+
+                            {% endif %}
+
+
+                        </td>
+
+
+                    </tr>
+
+
+                    {% else %}
+
+                    <tr>
+
+                        <td
+                            colspan="{% if current_user.role == 'ADMIN' %}10{% else %}9{% endif %}"
+                            class="empty-state"
+                        >
+
+                            {% if current_user.role == "ADMIN" %}
+
+                                No booking requests found.
+
+                            {% else %}
+
+                                You have no bookings yet.
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         Navigation Actions
+         ========================= -->
+
+    <div class="page-actions">
+
+        <a
+            href="{{ url_for('resources.list_resources') }}"
+            class="btn"
+        >
+            Browse Resources
+        </a>
+
+
+        <a
+            href="{{ url_for('dashboard') }}"
+            class="btn btn-secondary"
+        >
+            Back to Dashboard
+        </a>
+
+    </div>
+
+
+</main>
+
+
+<!-- =========================
+     Footer
+     ========================= -->
+
+<footer class="footer">
+
+    <strong>
+        Smart Resource Booking Platform
+    </strong>
+
+    <br>
+
+    Resource allocation and booking management system
+
+</footer>
+
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
 
 </body>
 

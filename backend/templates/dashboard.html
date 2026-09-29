@@ -1,35 +1,323 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <title>Dashboard</title>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard - Smart Resource Booking</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css', v='5') }}">
+
 </head>
+
+
 <body>
 
-    <h1>Welcome, {{ user.name }}</h1>
 
-    <p><strong>Email:</strong> {{ user.email }}</p>
-    <p><strong>Department:</strong> {{ user.department }}</p>
-    <p><strong>Role:</strong> {{ user.role }}</p>
-    
+<!-- =========================
+     Navigation Bar
+     ========================= -->
+
+<nav class="navbar">
+
+    <div class="brand">
+        Smart Resource Booking
+    </div>
+
+    <div class="nav-links">
+
+        <a href="{{ url_for('dashboard') }}">
+            Dashboard
+        </a>
+
+        <a href="{{ url_for('resources.list_resources') }}">
+            Resources
+        </a>
+
+        <a href="{{ url_for('bookings.list_bookings') }}">
+            {% if user.role == "ADMIN" %}
+                Booking Requests
+            {% else %}
+                My Bookings
+            {% endif %}
+        </a>
+
+        <a href="{{ url_for('auth.logout') }}">
+            Logout
+        </a>
+
+    </div>
+
+</nav>
+
+
+<!-- =========================
+     Main Dashboard
+     ========================= -->
+
+<main class="container">
+
+
+    <!-- Welcome -->
+
+    <section class="dashboard-header">
+
+        <h1>
+            Welcome, {{ user.name }}
+        </h1>
+
+        <p>
+            Manage and access shared institutional resources
+            through the Smart Resource Booking Platform.
+        </p>
+
+    </section>
+
+
+    <!-- =========================
+         Profile
+         ========================= -->
+
+    <div class="card">
+
+        <h2>
+            Your Profile
+        </h2>
+
+        <div class="profile-grid">
+
+
+            <div class="profile-item">
+
+                <span class="profile-label">
+                    Email
+                </span>
+
+                <span class="profile-value">
+                    {{ user.email }}
+                </span>
+
+            </div>
+
+
+            <div class="profile-item">
+
+                <span class="profile-label">
+                    Department
+                </span>
+
+                <span class="profile-value">
+                    {{ user.department }}
+                </span>
+
+            </div>
+
+
+            <div class="profile-item">
+
+                <span class="profile-label">
+                    Role
+                </span>
+
+                <span class="profile-value">
+
+                    <span class="badge">
+                        {{ user.role }}
+                    </span>
+
+                </span>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         ADMIN DASHBOARD
+         ========================= -->
+
     {% if user.role == "ADMIN" %}
-        <h2>Administrator Dashboard</h2>
-        <p>You have administrator access.</p>
-    {% else %}
-        <h2>User Dashboard</h2>
-        <p>You can browse and book resources.</p>
-    {% endif %}
-    <p>
-    <a href="{{ url_for('resources.list_resources') }}">
-        Browse Resources
-    </a>
-</p>
 
-<p>
-    <a href="{{ url_for('bookings.list_bookings') }}">
-        My Bookings
-    </a>
-</p>
-    <a href="{{ url_for('auth.logout') }}">Logout</a>
+        <div class="card">
+
+            <h2>
+                Administrator Control Center
+            </h2>
+
+            <p>
+                Manage institutional resources, monitor booking
+                activity, and control the allocation workflow
+                from the administrator interface.
+            </p>
+
+
+            <div class="actions">
+
+                <a class="btn"
+                   href="{{ url_for('resources.list_resources') }}">
+                    Manage Resources
+                </a>
+
+
+                <a class="btn btn-secondary"
+                   href="{{ url_for('bookings.list_bookings') }}">
+                    Manage Booking Requests
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             ADMIN QUICK ACTIONS
+             ========================= -->
+
+        <div class="card">
+
+            <h2>
+                Administrative Actions
+            </h2>
+
+            <p>
+                Quickly access the most frequently used
+                administrative functions.
+            </p>
+
+
+            <div class="actions">
+
+                <a class="btn"
+                   href="{{ url_for('resources.add_resource') }}">
+                    Add Resource
+                </a>
+
+
+                <a class="btn btn-secondary"
+                   href="{{ url_for('resources.list_resources') }}">
+                    Resource Inventory
+                </a>
+
+
+                <a class="btn btn-danger"
+                   href="{{ url_for('auth.logout') }}">
+                    Logout
+                </a>
+
+            </div>
+
+        </div>
+
+
+    {% else %}
+
+
+    <!-- =========================
+         USER DASHBOARD
+         ========================= -->
+
+        <div class="card">
+
+            <h2>
+                User Dashboard
+            </h2>
+
+            <p>
+                Browse available resources and submit booking
+                requests according to your requirements.
+            </p>
+
+
+            <div class="actions">
+
+                <a class="btn"
+                   href="{{ url_for('resources.list_resources') }}">
+                    Browse Resources
+                </a>
+
+
+                <a class="btn btn-secondary"
+                   href="{{ url_for('bookings.list_bookings') }}">
+                    View My Bookings
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             USER QUICK ACTIONS
+             ========================= -->
+
+        <div class="card">
+
+            <h2>
+                Quick Actions
+            </h2>
+
+            <p>
+                Quickly access the most frequently used
+                features of the Smart Resource Booking Platform.
+            </p>
+
+
+            <div class="actions">
+
+                <a class="btn"
+                   href="{{ url_for('resources.list_resources') }}">
+                    Browse Resources
+                </a>
+
+
+                <a class="btn btn-secondary"
+                   href="{{ url_for('bookings.list_bookings') }}">
+                    My Bookings
+                </a>
+
+
+                <a class="btn btn-danger"
+                   href="{{ url_for('auth.logout') }}">
+                    Logout
+                </a>
+
+            </div>
+
+        </div>
+
+    {% endif %}
+
+
+</main>
+
+
+<!-- =========================
+     Footer
+     ========================= -->
+
+<footer class="footer">
+
+    <strong>
+        Smart Resource Booking Platform
+    </strong>
+
+    <br>
+
+    Resource allocation and booking management system
+
+</footer>
+
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
 
 </body>
+
 </html>

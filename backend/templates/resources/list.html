@@ -1,280 +1,388 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <title>Resource Inventory</title>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Resources - Smart Resource Booking</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css', v='4') }}">
+
 </head>
+
 
 <body>
 
-<h1>Resource Inventory</h1>
 
-{% with messages = get_flashed_messages(with_categories=true) %}
+<nav class="navbar">
 
-    {% for category, message in messages %}
+    <div class="brand">
+        Smart Resource Booking
+    </div>
 
-        <p>{{ message }}</p>
+    <div class="nav-links">
 
-    {% endfor %}
+        <a href="{{ url_for('dashboard') }}">Dashboard</a>
 
-{% endwith %}
+        <a href="{{ url_for('resources.list_resources') }}">Resources</a>
 
+        <a href="{{ url_for('bookings.list_bookings') }}">My Bookings</a>
 
-{% if current_user.role == "ADMIN" %}
-
-    <p>
-        <a href="{{ url_for('resources.add_resource') }}">
-            Add Resource
-        </a>
-    </p>
-
-{% endif %}
-
-
-<h2>Search Resources</h2>
-
-
-<form method="GET">
+        <a href="{{ url_for('auth.logout') }}">Logout</a>
 
-    <input
-        type="text"
-        name="search"
-        placeholder="Search name or location"
-        value="{{ search }}"
-    >
+    </div>
 
+</nav>
 
-    <select name="resource_type">
 
-        <option value="">
-            All Types
-        </option>
+<main class="container">
 
-        <option
-            value="LAB"
-            {% if resource_type == "LAB" %}
-                selected
-            {% endif %}
-        >
-            Laboratory
-        </option>
 
-        <option
-            value="HALL"
-            {% if resource_type == "HALL" %}
-                selected
-            {% endif %}
-        >
-            Seminar Hall
-        </option>
+    <section class="page-header">
 
-        <option
-            value="ROOM"
-            {% if resource_type == "ROOM" %}
-                selected
-            {% endif %}
-        >
-            Meeting Room
-        </option>
+        <h1>Resource Inventory</h1>
 
-        <option
-            value="EQUIPMENT"
-            {% if resource_type == "EQUIPMENT" %}
-                selected
-            {% endif %}
-        >
-            Equipment
-        </option>
+        <p>
+            Browse, search and manage institutional resources.
+        </p>
 
-        <option
-            value="CLASSROOM"
-            {% if resource_type == "CLASSROOM" %}
-                selected
-            {% endif %}
-        >
-            Classroom
-        </option>
+    </section>
 
-    </select>
 
+    {% with messages = get_flashed_messages(with_categories=true) %}
 
-    <select name="status">
+        {% if messages %}
 
-        <option value="">
-            All Status
-        </option>
+            <div class="flash-container">
 
-        <option
-            value="AVAILABLE"
-            {% if status == "AVAILABLE" %}
-                selected
-            {% endif %}
-        >
-            Available
-        </option>
+                {% for category, message in messages %}
 
-        <option
-            value="UNAVAILABLE"
-            {% if status == "UNAVAILABLE" %}
-                selected
-            {% endif %}
-        >
-            Unavailable
-        </option>
+                    <div class="flash flash-{{ category }}">
+                        {{ message }}
+                    </div>
 
-        <option
-            value="MAINTENANCE"
-            {% if status == "MAINTENANCE" %}
-                selected
-            {% endif %}
-        >
-            Maintenance
-        </option>
+                {% endfor %}
 
-    </select>
+            </div>
 
+        {% endif %}
 
-    <button type="submit">
-        Search
-    </button>
+    {% endwith %}
 
 
-    <a href="{{ url_for('resources.list_resources') }}">
-        Clear
-    </a>
 
-</form>
+    <section class="filter-card">
 
+        <h2>Find a Resource</h2>
 
-<br>
+        <form method="GET"
+              class="filter-form">
 
 
-<table border="1" cellpadding="8">
+            <div class="filter-group">
 
-    <tr>
+                <label>Search</label>
 
-        <th>Name</th>
-        <th>Type</th>
-        <th>Location</th>
-        <th>Capacity</th>
-        <th>Status</th>
-        <th>Created By</th>
-        <th>Action</th>
+                <input
+                    type="text"
+                    name="search"
+                    placeholder="Search resource or location"
+                    value="{{ search }}"
+                >
 
-    </tr>
+            </div>
 
 
-    {% for resource in resources %}
+            <div class="filter-group">
 
-    <tr>
+                <label>Type</label>
 
-        <td>
-            {{ resource.name }}
-        </td>
+                <select name="resource_type">
 
-        <td>
-            {{ resource.resource_type }}
-        </td>
+                    <option value="">All Types</option>
 
-        <td>
-            {{ resource.location }}
-        </td>
+                    <option value="LAB"
+                        {% if resource_type == "LAB" %}selected{% endif %}>
+                        Laboratory
+                    </option>
 
-        <td>
-            {{ resource.capacity }}
-        </td>
+                    <option value="HALL"
+                        {% if resource_type == "HALL" %}selected{% endif %}>
+                        Seminar Hall
+                    </option>
 
-        <td>
-            {{ resource.status }}
-        </td>
+                    <option value="ROOM"
+                        {% if resource_type == "ROOM" %}selected{% endif %}>
+                        Meeting Room
+                    </option>
 
-        <td>
-            {{ resource.creator.name }}
-        </td>
+                    <option value="EQUIPMENT"
+                        {% if resource_type == "EQUIPMENT" %}selected{% endif %}>
+                        Equipment
+                    </option>
 
-        <td>
+                    <option value="CLASSROOM"
+                        {% if resource_type == "CLASSROOM" %}selected{% endif %}>
+                        Classroom
+                    </option>
 
-            {% if current_user.role == "ADMIN" %}
+                </select>
 
-                <a href="{{ url_for(
-                    'resources.edit_resource',
-                    resource_id=resource.id
-                ) }}">
-                    Edit
-                </a>
+            </div>
 
-                |
 
-                {% if resource.status != "UNAVAILABLE" %}
+            <div class="filter-group">
 
-                    <a href="{{ url_for(
-                        'resources.deactivate_resource',
-                        resource_id=resource.id
-                    ) }}">
-                        Deactivate
-                    </a>
+                <label>Status</label>
 
-                {% else %}
+                <select name="status">
 
-                    Already Unavailable
+                    <option value="">All Status</option>
 
-                {% endif %}
+                    <option value="AVAILABLE"
+                        {% if status == "AVAILABLE" %}selected{% endif %}>
+                        Available
+                    </option>
 
-                |
+                    <option value="UNAVAILABLE"
+                        {% if status == "UNAVAILABLE" %}selected{% endif %}>
+                        Unavailable
+                    </option>
 
-            {% endif %}
+                    <option value="MAINTENANCE"
+                        {% if status == "MAINTENANCE" %}selected{% endif %}>
+                        Maintenance
+                    </option>
 
+                </select>
 
-            {% if resource.status == "AVAILABLE" %}
+            </div>
 
-                <a href="{{ url_for(
-                    'bookings.create_booking',
-                    resource_id=resource.id
-                ) }}">
-                    Book
-                </a>
+
+            <button type="submit"
+                    class="btn">
+
+                Search
+
+            </button>
+
+
+            <a href="{{ url_for('resources.list_resources') }}"
+               class="btn btn-secondary">
+
+                Clear
+
+            </a>
+
+        </form>
+
+    </section>
+
+
+
+    {% if current_user.role == "ADMIN" %}
+
+        <div class="actions"
+             style="margin-bottom:25px;">
+
+            <a class="btn btn-success"
+               href="{{ url_for('resources.add_resource') }}">
+
+                + Add Resource
+
+            </a>
+
+        </div>
+
+    {% endif %}
+
+
+
+    <section class="table-card">
+
+        <table class="data-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Location</th>
+                    <th>Capacity</th>
+                    <th>Status</th>
+                    <th>Created By</th>
+                    <th>Action</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+            {% for resource in resources %}
+
+                <tr>
+
+                    <td>
+                        <strong>
+                            {{ resource.name }}
+                        </strong>
+                    </td>
+
+                    <td>
+                        {{ resource.resource_type }}
+                    </td>
+
+                    <td>
+                        {{ resource.location }}
+                    </td>
+
+                    <td>
+                        {{ resource.capacity }}
+                    </td>
+
+                    <td>
+
+                        {% if resource.status == "AVAILABLE" %}
+
+                            <span class="badge badge-available">
+                                AVAILABLE
+                            </span>
+
+                        {% elif resource.status == "MAINTENANCE" %}
+
+                            <span class="badge badge-maintenance">
+                                MAINTENANCE
+                            </span>
+
+                        {% else %}
+
+                            <span class="badge badge-unavailable">
+                                UNAVAILABLE
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+                    <td>
+                        {{ resource.creator.name }}
+                    </td>
+
+                    <td>
+
+                        {% if current_user.role == "ADMIN" %}
+
+                            <a href="{{ url_for(
+                                'resources.edit_resource',
+                                resource_id=resource.id
+                            ) }}"
+                               class="btn btn-secondary">
+
+                                Edit
+
+                            </a>
+
+                            {% if resource.status != "UNAVAILABLE" %}
+
+                                <a href="{{ url_for(
+                                    'resources.deactivate_resource',
+                                    resource_id=resource.id
+                                ) }}"
+                                   class="btn btn-danger">
+
+                                    Deactivate
+
+                                </a>
+
+                            {% endif %}
+
+                        {% endif %}
+
+
+                        {% if resource.status == "AVAILABLE" %}
+
+                            <a href="{{ url_for(
+                                'bookings.create_booking',
+                                resource_id=resource.id
+                            ) }}"
+                               class="btn">
+
+                                Book
+
+                            </a>
+
+                        {% else %}
+
+                            <span class="badge badge-unavailable">
+                                Not Available
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+
 
             {% else %}
 
-                Not Available
+                <tr>
 
-            {% endif %}
+                    <td colspan="7">
 
-        </td>
+                        <div class="empty-state">
 
-    </tr>
+                            <div class="empty-state-icon">
+                                📦
+                            </div>
+
+                            <h3>
+                                No Resources Found
+                            </h3>
+
+                            <p>
+                                Try changing your search or filter.
+                            </p>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </section>
 
 
-    {% else %}
-
-    <tr>
-
-        <td colspan="7">
-            No resources available.
-        </td>
-
-    </tr>
-
-    {% endfor %}
-
-</table>
+</main>
 
 
-<br>
+<footer class="footer">
+
+    <strong>Smart Resource Booking Platform</strong>
+
+    <br>
+
+    Resource inventory and allocation management
+
+</footer>
 
 
-<p>
-    <a href="{{ url_for('bookings.list_bookings') }}">
-        My Bookings
-    </a>
-</p>
-
-
-<p>
-    <a href="{{ url_for('dashboard') }}">
-        Back to Dashboard
-    </a>
-</p>
-
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
 
 </body>
+
 </html>

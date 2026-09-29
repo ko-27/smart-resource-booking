@@ -1,34 +1,128 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <title>Login</title>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Login - Smart Resource Booking</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css', v='4') }}">
+
 </head>
-<body>
 
-    <h1>Login</h1>
 
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% for category, message in messages %}
-            <p>{{ message }}</p>
-        {% endfor %}
-    {% endwith %}
+<body class="auth-page">
 
-    <form method="POST">
+<div class="auth-wrapper">
 
-        <label>Email:</label><br>
-        <input type="email" name="email" required><br><br>
 
-        <label>Password:</label><br>
-        <input type="password" name="password" required><br><br>
+    <div class="auth-logo">
 
-        <button type="submit">Login</button>
+        <h1>Smart Resource Booking</h1>
 
-    </form>
+        <p>
+            Institutional Resource Management Platform
+        </p>
 
-    <p>
-        New user?
-        <a href="{{ url_for('auth.register') }}">Create an account</a>
-    </p>
+    </div>
+
+
+    <div class="auth-card">
+
+        <h2>Welcome Back</h2>
+
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+
+            {% if messages %}
+
+                <div class="flash-container">
+
+                    {% for category, message in messages %}
+
+                        <div class="flash flash-{{ category }}">
+                            {{ message }}
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            {% endif %}
+
+        {% endwith %}
+
+
+        <form method="POST">
+
+
+            <div class="form-group">
+
+                <label for="email">
+                    Email Address
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Enter your email"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="password">
+                    Password
+                </label>
+
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Enter your password"
+                    required
+                >
+
+            </div>
+
+
+            <button type="submit"
+                    class="btn"
+                    style="width:100%;">
+
+                Login
+
+            </button>
+
+        </form>
+
+
+        <div class="auth-footer">
+
+            Don't have an account?
+
+            <a href="{{ url_for('auth.register') }}">
+                Create an account
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
 
 </body>
+
 </html>

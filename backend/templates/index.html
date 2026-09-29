@@ -1,20 +1,168 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
     <title>Smart Resource Booking</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css', v='4') }}">
+
 </head>
+
+
 <body>
 
-    <h1>Smart Resource Booking & Allocation Platform</h1>
 
-    <p>
-        Centralized management of institutional resources,
-        bookings and availability.
-    </p>
+<nav class="navbar">
 
-    <a href="{{ url_for('auth.register') }}">Register</a>
-    |
-    <a href="{{ url_for('auth.login') }}">Login</a>
+    <div class="brand">
+        Smart Resource Booking
+    </div>
+
+    <div class="nav-links">
+
+        <a href="{{ url_for('auth.login') }}">
+            Login
+        </a>
+
+        <a href="{{ url_for('auth.register') }}">
+            Register
+        </a>
+
+    </div>
+
+</nav>
+
+
+<main class="container">
+
+
+    <section class="dashboard-header"
+             style="padding:80px 20px;">
+
+        <div style="font-size:4rem;">
+            🏢
+        </div>
+
+        <h1>
+            Smart Resource Booking
+        </h1>
+
+        <p>
+            A centralized platform for managing,
+            requesting and allocating institutional
+            resources efficiently.
+        </p>
+
+
+        <div class="actions"
+             style="justify-content:center;">
+
+            <a href="{{ url_for('auth.login') }}"
+               class="btn">
+
+                Login
+
+            </a>
+
+
+            <a href="{{ url_for('auth.register') }}"
+               class="btn btn-secondary">
+
+                Create Account
+
+            </a>
+
+        </div>
+
+    </section>
+
+
+
+    <section class="stats-grid">
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                📦
+            </div>
+
+            <div class="stat-number">
+                Resource Management
+            </div>
+
+            <div class="stat-label">
+                Maintain a centralized inventory
+                of institutional resources.
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                📅
+            </div>
+
+            <div class="stat-number">
+                Smart Booking
+            </div>
+
+            <div class="stat-label">
+                Submit and track resource
+                booking requests.
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                🔐
+            </div>
+
+            <div class="stat-number">
+                Role-Based Access
+            </div>
+
+            <div class="stat-label">
+                Separate administrative and
+                user workflows.
+            </div>
+
+        </div>
+
+
+    </section>
+
+
+</main>
+
+
+<footer class="footer">
+
+    <strong>
+        Smart Resource Booking Platform
+    </strong>
+
+    <br>
+
+    Digital resource allocation and booking management system
+
+</footer>
+
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
 
 </body>
+
 </html>
