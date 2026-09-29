@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+</head>
+<body>
+
+    <h1>Welcome, {{ user.name }}</h1>
+
+    <p><strong>Email:</strong> {{ user.email }}</p>
+    <p><strong>Department:</strong> {{ user.department }}</p>
+    <p><strong>Role:</strong> {{ user.role }}</p>
+
+    {% if user.role == "ADMIN" %}
+        <h2>Administrator Dashboard</h2>
+        <p>You have administrator access.</p>
+    {% else %}
+        <h2>User Dashboard</h2>
+        <p>You can browse and book resources.</p>
+    {% endif %}
+
+    <a href="{{ url_for('auth.logout') }}">Logout</a>
+
+</body>
+</html>
