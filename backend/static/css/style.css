@@ -1790,3 +1790,94 @@ a:hover {
 
 }
 
+
+/* =========================================================
+   RESOURCE FORM IMPROVEMENTS
+   ========================================================= */
+
+.form-card {
+    border-radius: 16px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.07);
+}
+
+.form-card h2 {
+    margin-bottom: 22px;
+    color: #172554;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 7px;
+    color: #334155;
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea,
+.form-card input,
+.form-card select,
+.form-card textarea {
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #cbd5e1;
+    border-radius: 9px;
+    padding: 11px 13px;
+    background: #ffffff;
+    color: #172554;
+    font: inherit;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-group textarea,
+.form-card textarea {
+    min-height: 110px;
+    resize: vertical;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus,
+.form-card input:focus,
+.form-card select:focus,
+.form-card textarea:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.form-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 25px;
+}
+
+.form-help {
+    display: block;
+    margin-top: 6px;
+    color: #64748b;
+    font-size: 0.8rem;
+    line-height: 1.5;
+}
+
+@media (max-width: 600px) {
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .form-actions .btn {
+        width: 100%;
+        text-align: center;
+    }
+
+}
+
