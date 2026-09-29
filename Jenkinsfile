@@ -27,13 +27,17 @@ pipeline {
             }
         }
 
-        stage('Automated Testing') {
-            steps {
-                echo 'Running automated tests'
+       stage('Automated Testing') {
+         steps {
+             echo 'Installing project dependencies'
 
-                bat 'python -m pytest -v'
-            }
-        }
+             bat 'python -m pip install -r requirements.txt'
+
+             echo 'Running automated tests'
+  
+             bat 'python -m pytest -v'
+    	  }
+	}
 
         stage('Ansible Deployment') {
             steps {
