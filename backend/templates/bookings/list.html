@@ -190,6 +190,92 @@
     </section>
 
 
+    <!-- Booking Status Summary -->
+
+    <section class="booking-summary-grid">
+
+        <div class="booking-summary-card summary-pending">
+
+            <span class="summary-label">
+                {% if current_user.role == "ADMIN" %}
+                    Pending
+                {% else %}
+                    Requested
+                {% endif %}
+            </span>
+
+            <strong>
+                {{ bookings | selectattr("status", "equalto", "PENDING") | list | length }}
+            </strong>
+
+            <small>
+                {% if current_user.role == "ADMIN" %}
+                    Awaiting approval
+                {% else %}
+                    Awaiting administrator review
+                {% endif %}
+            </small>
+
+        </div>
+
+
+        <div class="booking-summary-card summary-booked">
+
+            <span class="summary-label">
+                {% if current_user.role == "ADMIN" %}
+                    Approved
+                {% else %}
+                    Approved
+                {% endif %}
+            </span>
+
+            <strong>
+                {{ bookings | selectattr("status", "equalto", "BOOKED") | list | length }}
+            </strong>
+
+            <small>
+                Confirmed bookings
+            </small>
+
+        </div>
+
+
+        <div class="booking-summary-card summary-rejected">
+
+            <span class="summary-label">
+                Rejected
+            </span>
+
+            <strong>
+                {{ bookings | selectattr("status", "equalto", "REJECTED") | list | length }}
+            </strong>
+
+            <small>
+                Requests not approved
+            </small>
+
+        </div>
+
+
+        <div class="booking-summary-card summary-cancelled">
+
+            <span class="summary-label">
+                Cancelled
+            </span>
+
+            <strong>
+                {{ bookings | selectattr("status", "equalto", "CANCELLED") | list | length }}
+            </strong>
+
+            <small>
+                Cancelled requests
+            </small>
+
+        </div>
+
+    </section>
+
+
     <!-- Booking Table -->
 
     <section class="table-card">
