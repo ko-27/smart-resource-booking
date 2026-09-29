@@ -84,3 +84,49 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 });
+
+/* =========================================================
+   RESOURCE ACTION CONFIRMATIONS
+   ========================================================= */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const resourceActions = document.querySelectorAll(
+        'a[href*="/resources/deactivate/"], ' +
+        'a[href*="/resources/activate/"], ' +
+        'a[href*="/resources/delete/"]'
+    );
+
+    resourceActions.forEach(function (link) {
+
+        link.addEventListener("click", function (event) {
+
+            const href = link.getAttribute("href");
+            let message = "";
+
+            if (href.includes("/resources/deactivate/")) {
+
+                message =
+                    "Are you sure you want to deactivate this resource?";
+
+            } else if (href.includes("/resources/activate/")) {
+
+                message =
+                    "Are you sure you want to activate this resource?";
+
+            } else if (href.includes("/resources/delete/")) {
+
+                message =
+                    "Are you sure you want to delete this resource? This action may not be reversible.";
+
+            }
+
+            if (message && !window.confirm(message)) {
+                event.preventDefault();
+            }
+
+        });
+
+    });
+
+});
