@@ -132,7 +132,7 @@ def test_user_can_create_booking(
         assert booking.user_id == user_id
         assert booking.resource_id == resource_id
         assert booking.purpose == "Project review"
-        assert booking.status == "BOOKED"
+        assert booking.status == "PENDING"
 
 
 def test_overlapping_booking_is_rejected(
@@ -184,7 +184,7 @@ def test_overlapping_booking_is_rejected(
         follow_redirects=True
     )
 
-    assert b"already booked" in response.data
+    assert b"already requested or booked" in response.data
 
     with client.application.app_context():
 
@@ -424,10 +424,17 @@ def test_cancelled_booking_does_not_block_new_booking(
 
         assert len(bookings) == 2
 
-        active_bookings = [
+        cancelled_bookings = [
             booking
             for booking in bookings
-            if booking.status == "BOOKED"
+            if booking.status == "CANCELLED"
+    ]
+
+    pending_bookings = [
+            booking
+            for booking in bookings
+            if booking.status == "PENDING"
         ]
 
-        assert len(active_bookings) == 1
+    assert len(cancelled_bookings) == 1
+    assert len(pending_bookings) == 1

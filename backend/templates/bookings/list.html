@@ -17,7 +17,65 @@
     <h1>My Bookings</h1>
 
 {% endif %}
+<h2>Filter Bookings</h2>
 
+<form method="GET">
+
+    <select name="status">
+
+        <option value="">
+            All Status
+        </option>
+
+        <option
+            value="PENDING"
+            {% if status_filter == "PENDING" %}
+                selected
+            {% endif %}
+        >
+            Pending
+        </option>
+
+        <option
+            value="BOOKED"
+            {% if status_filter == "BOOKED" %}
+                selected
+            {% endif %}
+        >
+            Approved
+        </option>
+
+        <option
+            value="REJECTED"
+            {% if status_filter == "REJECTED" %}
+                selected
+            {% endif %}
+        >
+            Rejected
+        </option>
+
+        <option
+            value="CANCELLED"
+            {% if status_filter == "CANCELLED" %}
+                selected
+            {% endif %}
+        >
+            Cancelled
+        </option>
+
+    </select>
+
+    <button type="submit">
+        Filter
+    </button>
+
+    <a href="{{ url_for('bookings.list_bookings') }}">
+        Clear
+    </a>
+
+</form>
+
+<br>
 
 {% with messages = get_flashed_messages(with_categories=true) %}
 
@@ -115,22 +173,61 @@
 
         <td>
 
-            {% if booking.status != "CANCELLED" %}
+    {% if current_user.role == "ADMIN" %}
 
-                <a href="{{ url_for(
-                    'bookings.cancel_booking',
-                    booking_id=booking.id
-                ) }}">
-                    Cancel
-                </a>
+        {% if booking.status == "PENDING" %}
 
-            {% else %}
+            <a href="{{ url_for(
+                'bookings.approve_booking',
+                booking_id=booking.id
+            ) }}">
+                Approve
+            </a>
 
-                -
+            |
 
-            {% endif %}
+            <a href="{{ url_for(
+                'bookings.reject_booking',
+                booking_id=booking.id
+            ) }}">
+                Reject
+            </a>
 
-        </td>
+        {% elif booking.status == "BOOKED" %}
+
+            <a href="{{ url_for(
+                'bookings.cancel_booking',
+                booking_id=booking.id
+            ) }}">
+                Cancel
+            </a>
+
+        {% else %}
+
+            -
+
+        {% endif %}
+
+    {% else %}
+
+        {% if booking.status == "PENDING" or booking.status == "BOOKED" %}
+
+            <a href="{{ url_for(
+                'bookings.cancel_booking',
+                booking_id=booking.id
+            ) }}">
+                Cancel
+            </a>
+
+        {% else %}
+
+            -
+
+        {% endif %}
+
+    {% endif %}
+
+    </td>
 
     </tr>
 

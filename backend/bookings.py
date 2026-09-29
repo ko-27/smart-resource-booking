@@ -25,25 +25,36 @@ bookings = Blueprint(
 @login_required
 def list_bookings():
 
+    status_filter = request.args.get(
+        "status",
+        ""
+    ).strip()
+
     if current_user.role == "ADMIN":
 
-        booking_list = Booking.query.order_by(
-            Booking.booking_date.desc(),
-            Booking.start_time.desc()
-        ).all()
+        query = Booking.query
 
     else:
 
-        booking_list = Booking.query.filter_by(
+        query = Booking.query.filter_by(
             user_id=current_user.id
-        ).order_by(
-            Booking.booking_date.desc(),
-            Booking.start_time.desc()
-        ).all()
+        )
+
+    if status_filter:
+
+        query = query.filter(
+            Booking.status == status_filter
+        )
+
+    booking_list = query.order_by(
+        Booking.booking_date.desc(),
+        Booking.start_time.desc()
+    ).all()
 
     return render_template(
         "bookings/list.html",
-        bookings=booking_list
+        bookings=booking_list,
+        status_filter=status_filter
     )
 
 
@@ -176,24 +187,23 @@ def create_booking(resource_id):
             )
 
         existing_booking = Booking.query.filter(
-            Booking.resource_id == resource.id,
-            Booking.booking_date == booking_date,
-            Booking.status != "CANCELLED",
-            Booking.start_time < end_time,
-            Booking.end_time > start_time
-        ).first()
+              Booking.resource_id == resource.id,
+              Booking.booking_date == booking_date,
+              Booking.status.in_(["PENDING", "BOOKED"]),
+              Booking.start_time < end_time,
+              Booking.end_time > start_time
+         ).first()
 
         if existing_booking:
 
             flash(
-                "Resource is already booked for the selected time.",
-                "error"
+                 "The resource is already requested or booked for the selected time slot.",
+                 "error"
             )
 
             return redirect(
                 url_for(
-                    "bookings.create_booking",
-                    resource_id=resource.id
+                     "resources.list_resources"
                 )
             )
 
@@ -204,14 +214,14 @@ def create_booking(resource_id):
             start_time=start_time,
             end_time=end_time,
             purpose=purpose,
-            status="BOOKED"
+            status="PENDING"
         )
 
         db.session.add(booking)
         db.session.commit()
 
         flash(
-            "Resource booked successfully.",
+           "Booking request submitted successfully. Waiting for administrator approval.",
             "success"
         )
 
@@ -278,6 +288,139 @@ def cancel_booking(booking_id):
 
     flash(
         "Booking cancelled successfully.",
+        "success"
+    )
+
+    return redirect(
+        url_for("bookings.list_bookings")
+    )
+@bookings.route(
+    "/approve/<int:booking_id>"
+)
+@login_required
+def approve_booking(booking_id):
+
+    if current_user.role != "ADMIN":
+
+        flash(
+            "Administrator access required.",
+            "error"
+        )
+
+        return redirect(
+            url_for("bookings.list_bookings")
+        )
+
+    booking = db.session.get(
+        Booking,
+        booking_id
+    )
+
+    if booking is None:
+
+        flash(
+            "Booking not found.",
+            "error"
+        )
+
+        return redirect(
+            url_for("bookings.list_bookings")
+        )
+
+    if booking.status != "PENDING":
+
+        flash(
+            "Only pending bookings can be approved.",
+            "error"
+        )
+
+        return redirect(
+            url_for("bookings.list_bookings")
+        )
+
+    conflicting_booking = Booking.query.filter(
+        Booking.id != booking.id,
+        Booking.resource_id == booking.resource_id,
+        Booking.booking_date == booking.booking_date,
+        Booking.status == "BOOKED",
+        Booking.start_time < booking.end_time,
+        Booking.end_time > booking.start_time
+    ).first()
+
+    if conflicting_booking:
+
+        flash(
+            "Cannot approve this booking because the resource is already booked for the selected time slot.",
+            "error"
+        )
+
+        return redirect(
+            url_for("bookings.list_bookings")
+        )
+
+    booking.status = "BOOKED"
+
+    db.session.commit()
+
+    flash(
+        "Booking approved successfully.",
+        "success"
+    )
+
+    return redirect(
+        url_for("bookings.list_bookings")
+    )
+
+@bookings.route(
+    "/reject/<int:booking_id>"
+)
+@login_required
+def reject_booking(booking_id):
+
+    if current_user.role != "ADMIN":
+
+        flash(
+            "Administrator access required.",
+            "error"
+        )
+
+        return redirect(
+            url_for("bookings.list_bookings")
+        )
+
+    booking = db.session.get(
+        Booking,
+        booking_id
+    )
+
+    if booking is None:
+
+        flash(
+            "Booking not found.",
+            "error"
+        )
+
+        return redirect(
+            url_for("bookings.list_bookings")
+        )
+
+    if booking.status != "PENDING":
+
+        flash(
+            "Only pending bookings can be rejected.",
+            "error"
+        )
+
+        return redirect(
+            url_for("bookings.list_bookings")
+        )
+
+    booking.status = "REJECTED"
+
+    db.session.commit()
+
+    flash(
+        "Booking rejected successfully.",
         "success"
     )
 
