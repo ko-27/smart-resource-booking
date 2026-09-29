@@ -151,6 +151,84 @@
     {% endif %}
 
 
+    <!-- User Statistics -->
+
+    {% if user.role != "ADMIN" %}
+
+        <section class="dashboard-stats user-stats">
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    &#9635;
+                </div>
+
+                <div class="stat-number">
+                    {{ requested_count }}
+                </div>
+
+                <div class="stat-label">
+                    Requested
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    &#10003;
+                </div>
+
+                <div class="stat-number">
+                    {{ approved_count }}
+                </div>
+
+                <div class="stat-label">
+                    Approved
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    !
+                </div>
+
+                <div class="stat-number">
+                    {{ rejected_count }}
+                </div>
+
+                <div class="stat-label">
+                    Rejected
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    &#8617;
+                </div>
+
+                <div class="stat-number">
+                    {{ cancelled_count }}
+                </div>
+
+                <div class="stat-label">
+                    Cancelled
+                </div>
+
+            </div>
+
+        </section>
+
+    {% endif %}
+
+
     <!-- Profile -->
 
     <div class="card profile-card">
