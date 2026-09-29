@@ -3,7 +3,7 @@ from flask_login import current_user, login_required
 
 from .config import Config
 from .extensions import db, login_manager
-from .models import User
+from .models import User, Resource, Booking
 from .auth import auth
 from .resources import resources
 from .bookings import bookings
@@ -35,7 +35,54 @@ def create_app(test_config=None):
     @app.route("/dashboard")
     @login_required
     def dashboard():
-        return render_template("dashboard.html", user=current_user)
+
+        if current_user.role == "ADMIN":
+
+            resource_count = Resource.query.count()
+
+            booked_count = Booking.query.filter_by(
+                status="BOOKED"
+            ).count()
+
+            pending_count = Booking.query.filter_by(
+                status="PENDING"
+            ).count()
+
+            return render_template(
+                "dashboard.html",
+                user=current_user,
+                resource_count=resource_count,
+                booked_count=booked_count,
+                pending_count=pending_count
+            )
+
+        requested_count = Booking.query.filter_by(
+            user_id=current_user.id
+        ).count()
+
+        approved_count = Booking.query.filter_by(
+            user_id=current_user.id,
+            status="BOOKED"
+        ).count()
+
+        rejected_count = Booking.query.filter_by(
+            user_id=current_user.id,
+            status="REJECTED"
+        ).count()
+
+        cancelled_count = Booking.query.filter_by(
+            user_id=current_user.id,
+            status="CANCELLED"
+        ).count()
+
+        return render_template(
+            "dashboard.html",
+            user=current_user,
+            requested_count=requested_count,
+            approved_count=approved_count,
+            rejected_count=rejected_count,
+            cancelled_count=cancelled_count
+        )
 
     @app.cli.command("create-admin")
     def create_admin():
