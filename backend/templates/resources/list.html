@@ -31,7 +31,13 @@
 
         <a href="{{ url_for('resources.list_resources') }}">Resources</a>
 
-        <a href="{{ url_for('bookings.list_bookings') }}">My Bookings</a>
+        <a href="{{ url_for('bookings.list_bookings') }}">
+            {% if current_user.role == "ADMIN" %}
+                Booking Requests
+            {% else %}
+                My Bookings
+            {% endif %}
+        </a>
 
         <a href="{{ url_for('auth.logout') }}">Logout</a>
 
@@ -43,13 +49,37 @@
 <main class="container">
 
 
-    <section class="page-header">
+    <section class="page-header resource-page-header">
 
-        <h1>Resource Inventory</h1>
+        {% if current_user.role == "ADMIN" %}
 
-        <p>
-            Browse, search and manage institutional resources.
-        </p>
+            <span class="dashboard-kicker">
+                RESOURCE ADMINISTRATION
+            </span>
+
+            <h1>Resource Management</h1>
+
+            <p>
+                Manage institutional resources, control their
+                availability, and maintain an accurate resource
+                inventory for efficient allocation.
+            </p>
+
+        {% else %}
+
+            <span class="dashboard-kicker">
+                RESOURCE DISCOVERY
+            </span>
+
+            <h1>Resource Inventory</h1>
+
+            <p>
+                Browse available institutional resources, review
+                their details, and submit booking requests for
+                the resources you need.
+            </p>
+
+        {% endif %}
 
     </section>
 
@@ -78,7 +108,13 @@
 
     <section class="filter-card">
 
-        <h2>Find a Resource</h2>
+        <h2>
+            {% if current_user.role == "ADMIN" %}
+                Find and Manage Resources
+            {% else %}
+                Find a Resource
+            {% endif %}
+        </h2>
 
         <form method="GET"
               class="filter-form">
