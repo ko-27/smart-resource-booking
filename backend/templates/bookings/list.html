@@ -8,27 +8,15 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <title>
-        {% if current_user.role == "ADMIN" %}
-            Booking Requests
-        {% else %}
-            My Bookings
-        {% endif %}
-        - Smart Resource Booking
-    </title>
+    <title>Booking Requests - Smart Resource Booking</title>
 
     <link rel="stylesheet"
-          href="{{ url_for('static', filename='css/style.css', v='6') }}">
+          href="{{ url_for('static', filename='css/style.css', v='5') }}">
 
 </head>
 
 
 <body>
-
-
-<!-- =========================
-     Navigation
-     ========================= -->
 
 <nav class="navbar">
 
@@ -36,29 +24,19 @@
         Smart Resource Booking
     </div>
 
-
     <div class="nav-links">
 
         <a href="{{ url_for('dashboard') }}">
             Dashboard
         </a>
 
-
         <a href="{{ url_for('resources.list_resources') }}">
             Resources
         </a>
 
-
         <a href="{{ url_for('bookings.list_bookings') }}">
-
-            {% if current_user.role == "ADMIN" %}
-                Booking Requests
-            {% else %}
-                My Bookings
-            {% endif %}
-
+            Booking Requests
         </a>
-
 
         <a href="{{ url_for('auth.logout') }}">
             Logout
@@ -69,56 +47,46 @@
 </nav>
 
 
-<!-- =========================
-     Main Content
-     ========================= -->
-
 <main class="container">
 
+    <section class="page-header">
 
-    <!-- Page Header -->
-
-    <section class="dashboard-header">
-
-        <h1>
-
-            {% if current_user.role == "ADMIN" %}
-                Booking Requests
-            {% else %}
-                My Bookings
-            {% endif %}
-
-        </h1>
-
+        <h1>Booking Requests</h1>
 
         <p>
-
-            {% if current_user.role == "ADMIN" %}
-
-                Review and manage resource booking requests
-                submitted by users.
-
-            {% else %}
-
-                View and manage your resource booking requests.
-
-            {% endif %}
-
+            Review and manage resource booking requests
+            submitted by users.
         </p>
 
     </section>
 
 
-    <!-- =========================
-         Filter Section
-         ========================= -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
 
-    <div class="card">
+        {% if messages %}
 
-        <h2>
-            Filter Bookings
-        </h2>
+            <div class="flash-container">
 
+                {% for category, message in messages %}
+
+                    <div class="flash-message {{ category }}">
+                        {{ message }}
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% endif %}
+
+    {% endwith %}
+
+
+    <!-- Filter Section -->
+
+    <section class="form-card booking-filter-card">
+
+        <h2>Filter Bookings</h2>
 
         <form method="GET" class="filter-form">
 
@@ -128,115 +96,85 @@
                     All Status
                 </option>
 
-
                 <option value="PENDING"
                     {% if status == "PENDING" %}
                         selected
-                    {% endif %}
-                >
+                    {% endif %}>
                     Pending
                 </option>
-
 
                 <option value="BOOKED"
                     {% if status == "BOOKED" %}
                         selected
-                    {% endif %}
-                >
+                    {% endif %}>
                     Booked
                 </option>
 
+                <option value="REJECTED"
+                    {% if status == "REJECTED" %}
+                        selected
+                    {% endif %}>
+                    Rejected
+                </option>
 
                 <option value="CANCELLED"
                     {% if status == "CANCELLED" %}
                         selected
-                    {% endif %}
-                >
+                    {% endif %}>
                     Cancelled
                 </option>
 
             </select>
 
 
-            <button
-                type="submit"
-                class="btn"
-            >
+            <button type="submit" class="btn">
                 Filter
             </button>
 
 
-            <a
-                href="{{ url_for('bookings.list_bookings') }}"
-                class="btn btn-secondary"
-            >
+            <a href="{{ url_for('bookings.list_bookings') }}"
+               class="btn btn-secondary">
+
                 Clear
+
             </a>
 
         </form>
 
-    </div>
+    </section>
 
 
-    <!-- =========================
-         Booking Table
-         ========================= -->
+    <!-- Booking Table -->
 
-    <div class="card table-card">
+    <section class="table-card">
 
         <div class="table-wrapper">
 
-            <table>
+            <table class="booking-table">
 
                 <thead>
 
                     <tr>
 
-                        <th>
-                            Booking ID
-                        </th>
+                        <th>ID</th>
 
+                        <th>Requested By</th>
 
-                        {% if current_user.role == "ADMIN" %}
+                        <th>Resource</th>
 
-                            <th>
-                                Requested By
-                            </th>
+                        <th>Location</th>
 
-                        {% endif %}
+                        <th>Date</th>
 
+                        <th>Start</th>
 
-                        <th>
-                            Resource
-                        </th>
+                        <th>End</th>
 
-                        <th>
-                            Location
-                        </th>
+                        <th>Purpose</th>
 
-                        <th>
-                            Date
-                        </th>
+                        <th>Status</th>
 
-                        <th>
-                            Start
-                        </th>
-
-                        <th>
-                            End
-                        </th>
-
-                        <th>
-                            Purpose
-                        </th>
-
-                        <th>
-                            Status
-                        </th>
-
-                        <th>
-                            Action
-                        </th>
+                        <th>Action</th>
 
                     </tr>
 
@@ -249,23 +187,22 @@
 
                     <tr>
 
-
-                        <td>
+                        <td class="booking-id">
                             #{{ booking.id }}
                         </td>
 
 
-                        {% if current_user.role == "ADMIN" %}
+                        <td class="requester-cell">
 
-                            <td>
+                            <strong>
                                 {{ booking.user.name }}
-                                <br>
-                                <small>
-                                    {{ booking.user.email }}
-                                </small>
-                            </td>
+                            </strong>
 
-                        {% endif %}
+                            <span>
+                                {{ booking.user.email }}
+                            </span>
+
+                        </td>
 
 
                         <td>
@@ -278,49 +215,55 @@
                         </td>
 
 
-                        <td>
+                        <td class="date-cell">
                             {{ booking.booking_date }}
                         </td>
 
 
-                        <td>
+                        <td class="time-cell">
                             {{ booking.start_time }}
                         </td>
 
 
-                        <td>
+                        <td class="time-cell">
                             {{ booking.end_time }}
                         </td>
 
 
-                        <td>
+                        <td class="purpose-cell">
                             {{ booking.purpose }}
                         </td>
 
 
                         <td>
 
-                            {% if booking.status == "BOOKED" %}
+                            {% if booking.status == "PENDING" %}
 
-                                <span class="badge badge-success">
+                                <span class="status-badge status-pending">
+                                    PENDING
+                                </span>
+
+                            {% elif booking.status == "BOOKED" %}
+
+                                <span class="status-badge status-booked">
                                     BOOKED
                                 </span>
 
-                            {% elif booking.status == "PENDING" %}
+                            {% elif booking.status == "REJECTED" %}
 
-                                <span class="badge badge-warning">
-                                    PENDING
+                                <span class="status-badge status-rejected">
+                                    REJECTED
                                 </span>
 
                             {% elif booking.status == "CANCELLED" %}
 
-                                <span class="badge badge-danger">
+                                <span class="status-badge status-cancelled">
                                     CANCELLED
                                 </span>
 
                             {% else %}
 
-                                <span class="badge">
+                                <span class="status-badge">
                                     {{ booking.status }}
                                 </span>
 
@@ -329,22 +272,21 @@
                         </td>
 
 
-                        <td>
+                        <td class="action-cell">
 
+                            {% if booking.status == "PENDING" %}
 
-                            {% if current_user.role == "ADMIN" %}
-
-
-                                {% if booking.status == "PENDING" %}
+                                <div class="table-actions">
 
                                     <a
                                         href="{{ url_for(
                                             'bookings.approve_booking',
                                             booking_id=booking.id
                                         ) }}"
-                                        class="btn btn-small btn-success"
-                                    >
+                                        class="btn btn-success btn-small">
+
                                         Approve
+
                                     </a>
 
 
@@ -353,50 +295,23 @@
                                             'bookings.reject_booking',
                                             booking_id=booking.id
                                         ) }}"
-                                        class="btn btn-small btn-danger"
-                                    >
+                                        class="btn btn-danger btn-small">
+
                                         Reject
+
                                     </a>
 
-                                {% else %}
-
-                                    <span>
-                                        —
-                                    </span>
-
-                                {% endif %}
-
+                                </div>
 
                             {% else %}
 
-
-                                {% if booking.status == "PENDING"
-                                      or booking.status == "BOOKED" %}
-
-                                    <a
-                                        href="{{ url_for(
-                                            'bookings.cancel_booking',
-                                            booking_id=booking.id
-                                        ) }}"
-                                        class="btn btn-small btn-danger"
-                                    >
-                                        Cancel
-                                    </a>
-
-                                {% else %}
-
-                                    <span>
-                                        —
-                                    </span>
-
-                                {% endif %}
-
+                                <span class="no-action">
+                                    —
+                                </span>
 
                             {% endif %}
 
-
                         </td>
-
 
                     </tr>
 
@@ -405,20 +320,10 @@
 
                     <tr>
 
-                        <td
-                            colspan="{% if current_user.role == 'ADMIN' %}10{% else %}9{% endif %}"
-                            class="empty-state"
-                        >
+                        <td colspan="10"
+                            class="empty-state">
 
-                            {% if current_user.role == "ADMIN" %}
-
-                                No booking requests found.
-
-                            {% else %}
-
-                                You have no bookings yet.
-
-                            {% endif %}
+                            No booking requests found.
 
                         </td>
 
@@ -432,39 +337,30 @@
 
         </div>
 
-    </div>
+    </section>
 
-
-    <!-- =========================
-         Navigation Actions
-         ========================= -->
 
     <div class="page-actions">
 
-        <a
-            href="{{ url_for('resources.list_resources') }}"
-            class="btn"
-        >
+        <a href="{{ url_for('resources.list_resources') }}"
+           class="btn">
+
             Browse Resources
+
         </a>
 
 
-        <a
-            href="{{ url_for('dashboard') }}"
-            class="btn btn-secondary"
-        >
+        <a href="{{ url_for('dashboard') }}"
+           class="btn btn-secondary">
+
             Back to Dashboard
+
         </a>
 
     </div>
 
-
 </main>
 
-
-<!-- =========================
-     Footer
-     ========================= -->
 
 <footer class="footer">
 

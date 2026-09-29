@@ -1132,3 +1132,280 @@ a:hover {
     color: #1e40af;
     border-color: #bfdbfe;
 }
+
+/* =========================================================
+   ADMIN BOOKING REQUEST TABLE
+   ========================================================= */
+
+.table-card {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 24px;
+    margin-top: 28px;
+    box-shadow: 0 10px 30px rgba(20, 45, 90, 0.08);
+    overflow: hidden;
+}
+
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.booking-table {
+    width: 100%;
+    min-width: 1150px;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: #ffffff;
+}
+
+.booking-table thead th {
+    background: #f1f5fb;
+    color: #172554;
+    font-size: 14px;
+    font-weight: 700;
+    text-align: left;
+    padding: 16px 14px;
+    border-bottom: 2px solid #dbe3ef;
+    white-space: nowrap;
+}
+
+.booking-table tbody td {
+    padding: 18px 14px;
+    border-bottom: 1px solid #e5eaf1;
+    color: #334155;
+    font-size: 14px;
+    vertical-align: middle;
+}
+
+.booking-table tbody tr {
+    transition: background 0.2s ease;
+}
+
+.booking-table tbody tr:hover {
+    background: #f8fafc;
+}
+
+.booking-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+
+/* Booking ID */
+
+.booking-id {
+    font-weight: 700;
+    color: #1d4ed8 !important;
+    white-space: nowrap;
+}
+
+
+/* Requester */
+
+.requester-cell {
+    min-width: 180px;
+}
+
+.requester-cell strong {
+    display: block;
+    color: #172554;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.requester-cell span {
+    display: block;
+    color: #64748b;
+    font-size: 12px;
+}
+
+
+/* Resource and location */
+
+.booking-table td:nth-child(3),
+.booking-table td:nth-child(4) {
+    min-width: 120px;
+}
+
+
+/* Date and time */
+
+.date-cell,
+.time-cell {
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
+
+/* Purpose */
+
+.purpose-cell {
+    min-width: 180px;
+    max-width: 240px;
+    line-height: 1.5;
+}
+
+
+/* Status */
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 85px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+}
+
+.status-pending {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.status-booked {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.status-rejected {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+.status-cancelled {
+    background: #e2e8f0;
+    color: #475569;
+}
+
+
+/* Action buttons */
+
+.action-cell {
+    min-width: 170px;
+}
+
+.table-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+}
+
+.btn-small {
+    padding: 9px 14px;
+    font-size: 12px;
+    border-radius: 8px;
+}
+
+
+.btn-success {
+    background: #16a34a;
+    color: #ffffff;
+}
+
+.btn-success:hover {
+    background: #15803d;
+    transform: translateY(-1px);
+}
+
+
+.btn-danger {
+    background: #dc2626;
+    color: #ffffff;
+}
+
+.btn-danger:hover {
+    background: #b91c1c;
+    transform: translateY(-1px);
+}
+
+
+.no-action {
+    color: #94a3b8;
+    font-size: 18px;
+}
+
+
+/* Empty table */
+
+.empty-state {
+    text-align: center !important;
+    padding: 45px !important;
+    color: #64748b !important;
+    font-size: 15px !important;
+}
+
+
+/* Filter */
+
+.booking-filter-card {
+    margin-bottom: 28px;
+}
+
+.filter-form {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.filter-form select {
+    min-width: 260px;
+    padding: 12px 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 9px;
+    background: #ffffff;
+    font-size: 14px;
+}
+
+
+/* Page actions */
+
+.page-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+}
+
+
+/* Responsive */
+
+@media (max-width: 900px) {
+
+    .table-card {
+        padding: 16px;
+    }
+
+    .booking-table {
+        min-width: 1000px;
+    }
+
+    .booking-table tbody td {
+        padding: 14px 12px;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .filter-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .filter-form select {
+        width: 100%;
+    }
+
+    .filter-form .btn {
+        width: 100%;
+        text-align: center;
+    }
+
+}
