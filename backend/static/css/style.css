@@ -1599,3 +1599,135 @@ a:hover {
 
 }
 
+
+/* =========================================================
+   RESPONSIVE TABLES AND ACTION LAYOUT
+   ========================================================= */
+
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.data-table,
+.booking-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.data-table th,
+.booking-table th {
+    white-space: nowrap;
+    font-weight: 700;
+}
+
+.data-table td,
+.booking-table td {
+    vertical-align: middle;
+}
+
+.data-table tbody tr,
+.booking-table tbody tr {
+    transition: background-color 0.15s ease;
+}
+
+.data-table tbody tr:hover,
+.booking-table tbody tr:hover {
+    background-color: #f8fafc;
+}
+
+.requester-cell {
+    min-width: 170px;
+}
+
+.requester-cell strong {
+    display: block;
+    margin-bottom: 4px;
+    color: #172554;
+}
+
+.requester-cell span {
+    display: block;
+    color: #64748b;
+    font-size: 0.8rem;
+}
+
+.purpose-cell {
+    min-width: 180px;
+    max-width: 280px;
+    line-height: 1.5;
+}
+
+.date-cell,
+.time-cell {
+    white-space: nowrap;
+}
+
+.action-cell {
+    min-width: 150px;
+    white-space: nowrap;
+}
+
+.table-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.btn-small {
+    padding: 7px 12px;
+    font-size: 0.8rem;
+    line-height: 1.2;
+}
+
+.no-action {
+    color: #94a3b8;
+    font-weight: 600;
+}
+
+.empty-state {
+    padding: 40px 20px !important;
+    text-align: center;
+    color: #64748b;
+    font-weight: 600;
+}
+
+@media (max-width: 900px) {
+
+    .table-card {
+        overflow: hidden;
+    }
+
+    .data-table,
+    .booking-table {
+        min-width: 850px;
+    }
+
+    .booking-table {
+        min-width: 1050px;
+    }
+
+}
+
+@media (max-width: 600px) {
+
+    .table-wrapper {
+        margin-left: -5px;
+        margin-right: -5px;
+        width: calc(100% + 10px);
+    }
+
+    .table-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .table-actions .btn-small {
+        text-align: center;
+    }
+
+}
+
