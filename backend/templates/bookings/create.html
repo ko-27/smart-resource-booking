@@ -43,12 +43,18 @@
 <main class="container">
 
 
-    <section class="page-header">
+    <section class="page-header booking-create-header">
+
+        <span class="dashboard-kicker">
+            RESOURCE BOOKING
+        </span>
 
         <h1>Book a Resource</h1>
 
         <p>
-            Submit a request for the selected institutional resource.
+            Submit a booking request for the selected institutional
+            resource. Your request will be reviewed by an administrator
+            before the booking is confirmed.
         </p>
 
     </section>
@@ -72,14 +78,60 @@
 
   {% endwith %}
 
-    <div class="form-card">
+    <div class="booking-request-layout">
 
-        <h2>
-            Booking Request
-        </h2>
+        <section class="resource-summary-card">
+
+            <span class="dashboard-kicker">
+                SELECTED RESOURCE
+            </span>
+
+            <h2>
+                {{ resource.name }}
+            </h2>
+
+            <div class="resource-summary-grid">
+
+                <div>
+                    <span>Type</span>
+                    <strong>{{ resource.resource_type }}</strong>
+                </div>
+
+                <div>
+                    <span>Location</span>
+                    <strong>{{ resource.location }}</strong>
+                </div>
+
+                <div>
+                    <span>Capacity</span>
+                    <strong>{{ resource.capacity }}</strong>
+                </div>
+
+                <div>
+                    <span>Status</span>
+                    <strong class="resource-status-available">
+                        {{ resource.status }}
+                    </strong>
+                </div>
+
+            </div>
+
+        </section>
 
 
-        <form method="POST">
+        <section class="form-card booking-form-card">
+
+            <h2>
+                Booking Request
+            </h2>
+
+            <p class="form-intro">
+                Select the required date and time and provide a clear
+                purpose for your booking request.
+            </p>
+
+
+            <form method="POST">
 
 
             <div class="form-group">
@@ -140,8 +192,13 @@
                     id="purpose"
                     name="purpose"
                     placeholder="Explain why you need this resource"
+                    maxlength="500"
                     required
                 ></textarea>
+
+                <span class="form-help">
+                    Briefly describe the activity or purpose for this booking.
+                </span>
 
             </div>
 
@@ -166,7 +223,9 @@
             </div>
 
 
-        </form>
+            </form>
+
+        </section>
 
     </div>
 

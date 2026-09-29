@@ -1881,3 +1881,80 @@ a:hover {
 
 }
 
+
+/* =========================================================
+   BOOKING REQUEST FORM
+   ========================================================= */
+
+.booking-create-header {
+    margin-bottom: 28px;
+}
+
+.booking-request-layout {
+    display: grid;
+    grid-template-columns: minmax(260px, 0.75fr) minmax(0, 1.5fr);
+    gap: 24px;
+    align-items: start;
+}
+
+.resource-summary-card {
+    padding: 28px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, #eef4ff, #ffffff);
+    border: 1px solid #dbe5f4;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.07);
+}
+
+.resource-summary-card h2 {
+    margin: 8px 0 24px;
+    color: #172554;
+    font-size: 1.6rem;
+}
+
+.resource-summary-grid {
+    display: grid;
+    gap: 12px;
+}
+
+.resource-summary-grid > div {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 13px 15px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid #e2e8f0;
+}
+
+.resource-summary-grid span {
+    color: #64748b;
+    font-size: 0.78rem;
+    font-weight: 600;
+}
+
+.resource-summary-grid strong {
+    color: #172554;
+    font-size: 0.92rem;
+}
+
+.resource-status-available {
+    color: #166534 !important;
+}
+
+.booking-form-card {
+    padding: 30px;
+}
+
+.form-intro {
+    margin: -10px 0 24px;
+    color: #64748b;
+    line-height: 1.6;
+}
+
+@media (max-width: 800px) {
+
+    .booking-request-layout {
+        grid-template-columns: 1fr;
+    }
+
+}
