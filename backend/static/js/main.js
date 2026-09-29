@@ -38,3 +38,49 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 });
+/* =========================================================
+   BOOKING ACTION CONFIRMATIONS
+   ========================================================= */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const actionLinks = document.querySelectorAll(
+        'a[href*="/bookings/cancel/"], ' +
+        'a[href*="/bookings/approve/"], ' +
+        'a[href*="/bookings/reject/"]'
+    );
+
+    actionLinks.forEach(function (link) {
+
+        link.addEventListener("click", function (event) {
+
+            const href = link.getAttribute("href");
+
+            let message = "";
+
+            if (href.includes("/bookings/cancel/")) {
+
+                message =
+                    "Are you sure you want to cancel this booking?";
+
+            } else if (href.includes("/bookings/approve/")) {
+
+                message =
+                    "Are you sure you want to approve this booking request?";
+
+            } else if (href.includes("/bookings/reject/")) {
+
+                message =
+                    "Are you sure you want to reject this booking request?";
+
+            }
+
+            if (message && !window.confirm(message)) {
+                event.preventDefault();
+            }
+
+        });
+
+    });
+
+});
