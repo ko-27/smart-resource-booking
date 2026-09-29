@@ -65,6 +65,17 @@ def list_bookings():
 @login_required
 def create_booking(resource_id):
 
+    if current_user.role == "ADMIN":
+
+        flash(
+            "Administrators cannot create booking requests.",
+            "error"
+        )
+
+        return redirect(
+            url_for("resources.list_resources")
+        )
+
     resource = db.session.get(
         Resource,
         resource_id
