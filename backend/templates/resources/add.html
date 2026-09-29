@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Resource</title>
+</head>
+<body>
+
+<h1>Add New Resource</h1>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+        <p>{{ message }}</p>
+    {% endfor %}
+{% endwith %}
+
+<form method="POST">
+
+    <label>Resource Name:</label><br>
+    <input
+        type="text"
+        name="name"
+        required
+    >
+    <br><br>
+
+    <label>Resource Type:</label><br>
+
+    <select name="resource_type" required>
+
+        <option value="">
+            Select Type
+        </option>
+
+        <option value="LAB">
+            Laboratory
+        </option>
+
+        <option value="HALL">
+            Seminar Hall
+        </option>
+
+        <option value="ROOM">
+            Meeting Room
+        </option>
+
+        <option value="EQUIPMENT">
+            Equipment
+        </option>
+
+        <option value="CLASSROOM">
+            Classroom
+        </option>
+
+    </select>
+
+    <br><br>
+
+    <label>Description:</label><br>
+
+    <textarea
+        name="description"
+        rows="4"
+        cols="40"
+    ></textarea>
+
+    <br><br>
+
+    <label>Location:</label><br>
+
+    <input
+        type="text"
+        name="location"
+        required
+    >
+
+    <br><br>
+
+    <label>Capacity:</label><br>
+
+    <input
+        type="number"
+        name="capacity"
+        min="1"
+        required
+    >
+
+    <br><br>
+
+    <button type="submit">
+        Add Resource
+    </button>
+
+</form>
+
+<p>
+    <a href="{{ url_for('resources.list_resources') }}">
+        Back to Resources
+    </a>
+</p>
+
+</body>
+</html>

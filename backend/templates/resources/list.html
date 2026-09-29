@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Resource Inventory</title>
+</head>
+<body>
+
+<h1>Resource Inventory</h1>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+        <p>{{ message }}</p>
+    {% endfor %}
+{% endwith %}
+
+{% if current_user.role == "ADMIN" %}
+
+    <p>
+        <a href="{{ url_for('resources.add_resource') }}">
+            Add Resource
+        </a>
+    </p>
+
+{% endif %}
+
+
+<h2>Search Resources</h2>
+
+<form method="GET">
+
+    <input
+        type="text"
+        name="search"
+        placeholder="Search name or location"
+        value="{{ search }}"
+    >
+
+    <select name="resource_type">
+
+        <option value="">All Types</option>
+
+        <option value="LAB"
+            {% if resource_type == "LAB" %}
+                selected
+            {% endif %}>
+            Laboratory
+        </option>
+
+        <option value="HALL"
+            {% if resource_type == "HALL" %}
+                selected
+            {% endif %}>
+            Seminar Hall
+        </option>
+
+        <option value="ROOM"
+            {% if resource_type == "ROOM" %}
+                selected
+            {% endif %}>
+            Meeting Room
+        </option>
+
+        <option value="EQUIPMENT"
+            {% if resource_type == "EQUIPMENT" %}
+                selected
+            {% endif %}>
+            Equipment
+        </option>
+
+        <option value="CLASSROOM"
+            {% if resource_type == "CLASSROOM" %}
+                selected
+            {% endif %}>
+            Classroom
+        </option>
+
+    </select>
+
+
+    <select name="status">
+
+        <option value="">All Status</option>
+
+        <option value="AVAILABLE"
+            {% if status == "AVAILABLE" %}
+                selected
+            {% endif %}>
+            Available
+        </option>
+
+        <option value="UNAVAILABLE"
+            {% if status == "UNAVAILABLE" %}
+                selected
+            {% endif %}>
+            Unavailable
+        </option>
+
+        <option value="MAINTENANCE"
+            {% if status == "MAINTENANCE" %}
+                selected
+            {% endif %}>
+            Maintenance
+        </option>
+
+    </select>
+
+    <button type="submit">
+        Search
+    </button>
+
+    <a href="{{ url_for('resources.list_resources') }}">
+        Clear
+    </a>
+
+</form>
+
+
+<br>
+
+
+<table border="1" cellpadding="8">
+
+    <tr>
+
+        <th>Name</th>
+        <th>Type</th>
+        <th>Location</th>
+        <th>Capacity</th>
+        <th>Status</th>
+        <th>Created By</th>
+
+        {% if current_user.role == "ADMIN" %}
+            <th>Action</th>
+        {% endif %}
+
+    </tr>
+
+
+    {% for resource in resources %}
+
+    <tr>
+
+        <td>{{ resource.name }}</td>
+
+        <td>{{ resource.resource_type }}</td>
+
+        <td>{{ resource.location }}</td>
+
+        <td>{{ resource.capacity }}</td>
+
+        <td>{{ resource.status }}</td>
+
+        <td>{{ resource.creator.name }}</td>
+
+
+        {% if current_user.role == "ADMIN" %}
+
+        <td>
+
+            <a href="{{ url_for(
+                'resources.edit_resource',
+                resource_id=resource.id
+            ) }}">
+                Edit
+            </a>
+
+            |
+
+            {% if resource.status != "UNAVAILABLE" %}
+
+                <a href="{{ url_for(
+                    'resources.deactivate_resource',
+                    resource_id=resource.id
+                ) }}">
+                    Deactivate
+                </a>
+
+            {% else %}
+
+                Already Unavailable
+
+            {% endif %}
+
+        </td>
+
+        {% endif %}
+
+    </tr>
+
+    {% else %}
+
+    <tr>
+
+        <td colspan="7">
+            No resources available.
+        </td>
+
+    </tr>
+
+    {% endfor %}
+
+</table>
+
+
+<p>
+    <a href="{{ url_for('dashboard') }}">
+        Back to Dashboard
+    </a>
+</p>
+
+</body>
+</html>
