@@ -57,35 +57,77 @@
 
     <!-- Application Introduction -->
 
-    <section class="dashboard-header">
+    <section class="dashboard-hero">
 
-        <span class="dashboard-kicker">
-            SMART RESOURCE BOOKING & ALLOCATION PLATFORM
-        </span>
+        <div class="dashboard-hero-content">
 
-        <h1>
-            Welcome, {{ user.name }}
-        </h1>
+            <span class="dashboard-kicker">
+                SMART RESOURCE BOOKING & ALLOCATION PLATFORM
+            </span>
 
-        {% if user.role == "ADMIN" %}
+            <h1>
+                Welcome, {{ user.name }}
+            </h1>
 
-            <p>
-                A centralized platform for managing institutional
-                resources, reviewing booking requests, controlling
-                availability, and ensuring efficient and transparent
-                allocation of shared facilities and equipment.
-            </p>
+            {% if user.role == "ADMIN" %}
 
-        {% else %}
+                <p class="dashboard-hero-description">
+                    A centralized platform for managing institutional
+                    resources, reviewing booking requests, controlling
+                    availability, and ensuring efficient and transparent
+                    allocation of shared facilities and equipment.
+                </p>
 
-            <p>
-                A centralized platform for discovering shared
-                institutional resources, submitting booking requests,
-                and tracking every request from submission through
-                approval, rejection, or cancellation.
-            </p>
+                <div class="dashboard-highlights">
 
-        {% endif %}
+                    <div class="dashboard-highlight">
+                        <strong>Resource Management</strong>
+                        <span>Maintain institutional resources and availability.</span>
+                    </div>
+
+                    <div class="dashboard-highlight">
+                        <strong>Booking Control</strong>
+                        <span>Review, approve, and reject booking requests.</span>
+                    </div>
+
+                    <div class="dashboard-highlight">
+                        <strong>Allocation Monitoring</strong>
+                        <span>Monitor resource usage and booking activity.</span>
+                    </div>
+
+                </div>
+
+            {% else %}
+
+                <p class="dashboard-hero-description">
+                    A centralized platform for discovering shared
+                    institutional resources, submitting booking requests,
+                    and tracking every request through approval, rejection,
+                    or cancellation.
+                </p>
+
+                <div class="dashboard-highlights">
+
+                    <div class="dashboard-highlight">
+                        <strong>Discover Resources</strong>
+                        <span>Find available institutional resources quickly.</span>
+                    </div>
+
+                    <div class="dashboard-highlight">
+                        <strong>Request Resources</strong>
+                        <span>Submit booking requests for your required resources.</span>
+                    </div>
+
+                    <div class="dashboard-highlight">
+                        <strong>Track Bookings</strong>
+                        <span>Follow your requests from submission to final status.</span>
+                    </div>
+
+                </div>
+
+            {% endif %}
+
+        </div>
 
     </section>
 
