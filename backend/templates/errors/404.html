@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Page Not Found - Smart Resource Booking</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css', v='6') }}">
+
+</head>
+
+<body>
+
+<nav class="navbar">
+
+    <div class="brand">
+        Smart Resource Booking
+    </div>
+
+</nav>
+
+<main class="container">
+
+    <section class="error-page">
+
+        <span class="dashboard-kicker">
+            SMART RESOURCE BOOKING
+        </span>
+
+        <div class="error-code">
+            404
+        </div>
+
+        <h1>
+            Page Not Found
+        </h1>
+
+        <p>
+            The page you are looking for does not exist or may have
+            been moved to another location.
+        </p>
+
+        <div class="actions">
+
+            <a href="{{ url_for('dashboard') }}"
+               class="btn">
+                Back to Dashboard
+            </a>
+
+            <a href="{{ url_for('home') }}"
+               class="btn btn-secondary">
+                Home
+            </a>
+
+        </div>
+
+    </section>
+
+</main>
+
+<footer class="footer">
+
+    <strong>
+        Smart Resource Booking Platform
+    </strong>
+
+    <br>
+
+    Resource allocation and booking management system
+
+</footer>
+
+</body>
+
+</html>

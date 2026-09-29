@@ -84,6 +84,17 @@ def create_app(test_config=None):
             cancelled_count=cancelled_count
         )
 
+    @app.errorhandler(404)
+    def page_not_found(error):
+        return render_template("errors/404.html"), 404
+
+
+    @app.errorhandler(500)
+    def internal_server_error(error):
+        db.session.rollback()
+        return render_template("errors/500.html"), 500
+
+
     @app.cli.command("create-admin")
     def create_admin():
 
