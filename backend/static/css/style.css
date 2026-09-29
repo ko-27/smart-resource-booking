@@ -1731,3 +1731,62 @@ a:hover {
 
 }
 
+
+/* =========================================================
+   RESOURCE STATUS GUIDE
+   ========================================================= */
+
+.resource-status-guide {
+    margin-bottom: 25px;
+    padding: 20px 24px;
+    border-radius: 14px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+}
+
+.status-guide-title {
+    margin-bottom: 14px;
+    color: #172554;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.status-guide-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.status-guide-item {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: #64748b;
+    font-size: 0.86rem;
+}
+
+.status-badge.status-available {
+    color: #166534;
+    background: #dcfce7;
+}
+
+.status-badge.status-unavailable {
+    color: #991b1b;
+    background: #fee2e2;
+}
+
+.status-badge.status-maintenance {
+    color: #92400e;
+    background: #fef3c7;
+}
+
+@media (max-width: 700px) {
+
+    .status-guide-items {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+}
+
