@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>My Bookings</title>
+</head>
+
+<body>
+
+
+{% if current_user.role == "ADMIN" %}
+
+    <h1>All Resource Bookings</h1>
+
+{% else %}
+
+    <h1>My Bookings</h1>
+
+{% endif %}
+
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+
+    {% for category, message in messages %}
+
+        <p>{{ message }}</p>
+
+    {% endfor %}
+
+{% endwith %}
+
+
+<table border="1" cellpadding="8">
+
+    <tr>
+
+        <th>Booking ID</th>
+
+        {% if current_user.role == "ADMIN" %}
+
+            <th>Booked By</th>
+
+        {% endif %}
+
+        <th>Resource</th>
+        <th>Location</th>
+        <th>Date</th>
+        <th>Start</th>
+        <th>End</th>
+        <th>Purpose</th>
+        <th>Status</th>
+        <th>Action</th>
+
+    </tr>
+
+
+    {% for booking in bookings %}
+
+    <tr>
+
+        <td>
+            {{ booking.id }}
+        </td>
+
+
+        {% if current_user.role == "ADMIN" %}
+
+        <td>
+
+            {{ booking.user.name }}
+
+            <br>
+
+            {{ booking.user.email }}
+
+        </td>
+
+        {% endif %}
+
+
+        <td>
+            {{ booking.resource.name }}
+        </td>
+
+
+        <td>
+            {{ booking.resource.location }}
+        </td>
+
+
+        <td>
+            {{ booking.booking_date }}
+        </td>
+
+
+        <td>
+            {{ booking.start_time }}
+        </td>
+
+
+        <td>
+            {{ booking.end_time }}
+        </td>
+
+
+        <td>
+            {{ booking.purpose }}
+        </td>
+
+
+        <td>
+            {{ booking.status }}
+        </td>
+
+
+        <td>
+
+            {% if booking.status != "CANCELLED" %}
+
+                <a href="{{ url_for(
+                    'bookings.cancel_booking',
+                    booking_id=booking.id
+                ) }}">
+                    Cancel
+                </a>
+
+            {% else %}
+
+                -
+
+            {% endif %}
+
+        </td>
+
+    </tr>
+
+
+    {% else %}
+
+    <tr>
+
+        <td colspan="10">
+            No bookings found.
+        </td>
+
+    </tr>
+
+    {% endfor %}
+
+</table>
+
+
+<br>
+
+
+<p>
+    <a href="{{ url_for('resources.list_resources') }}">
+        Browse Resources
+    </a>
+</p>
+
+
+<p>
+    <a href="{{ url_for('dashboard') }}">
+        Back to Dashboard
+    </a>
+</p>
+
+
+</body>
+
+</html>

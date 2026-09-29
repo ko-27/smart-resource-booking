@@ -10,7 +10,7 @@
     <p><strong>Email:</strong> {{ user.email }}</p>
     <p><strong>Department:</strong> {{ user.department }}</p>
     <p><strong>Role:</strong> {{ user.role }}</p>
-
+    
     {% if user.role == "ADMIN" %}
         <h2>Administrator Dashboard</h2>
         <p>You have administrator access.</p>
@@ -18,7 +18,17 @@
         <h2>User Dashboard</h2>
         <p>You can browse and book resources.</p>
     {% endif %}
+    <p>
+    <a href="{{ url_for('resources.list_resources') }}">
+        Browse Resources
+    </a>
+</p>
 
+<p>
+    <a href="{{ url_for('bookings.list_bookings') }}">
+        My Bookings
+    </a>
+</p>
     <a href="{{ url_for('auth.logout') }}">Logout</a>
 
 </body>

@@ -6,6 +6,7 @@ from .extensions import db, login_manager
 from .models import User
 from .auth import auth
 from .resources import resources
+from .bookings import bookings
 
 def create_app(test_config=None):
 
@@ -25,6 +26,7 @@ def create_app(test_config=None):
 
     app.register_blueprint(auth)
     app.register_blueprint(resources)
+    app.register_blueprint(bookings)
 
     @app.route("/")
     def home():
