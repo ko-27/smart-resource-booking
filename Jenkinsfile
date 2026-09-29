@@ -2,7 +2,9 @@ pipeline {
     agent {
         label 'sscvk-agent'
     }
-
+    triggers {
+        githubPush()
+    }
     options {
         timestamps()
         disableConcurrentBuilds()
