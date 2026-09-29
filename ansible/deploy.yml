@@ -1,0 +1,58 @@
+---
+- name: Deploy Smart Resource Booking Application
+  hosts: local
+  connection: local
+  gather_facts: false
+
+  vars:
+    project_dir: /mnt/c/Users/sscvk/Documents/smart-resource-booking
+
+  tasks:
+
+    - name: Display deployment message
+      ansible.builtin.debug:
+        msg: "Starting Smart Resource Booking deployment"
+
+    - name: Stop existing application container
+      ansible.builtin.command:
+        cmd: docker stop smart-resource-booking-container
+      register: stop_result
+      failed_when: false
+      changed_when: false
+
+    - name: Remove existing application container
+      ansible.builtin.command:
+        cmd: docker rm smart-resource-booking-container
+      register: remove_result
+      failed_when: false
+      changed_when: false
+
+    - name: Build application Docker image
+      ansible.builtin.command:
+        cmd: docker build -t smart-resource-booking:1.0 .
+        chdir: "{{ project_dir }}"
+
+    - name: Start application container
+      ansible.builtin.command:
+        cmd: >
+          docker run -d
+          --name smart-resource-booking-container
+          --env-file .env
+          -p 5000:5000
+          --add-host=host.docker.internal:host-gateway
+          smart-resource-booking:1.0
+        chdir: "{{ project_dir }}"
+
+    - name: Verify running container
+      ansible.builtin.command:
+        cmd: docker ps --filter name=smart-resource-booking-container
+      register: container_status
+      changed_when: false
+
+    - name: Display container status
+      ansible.builtin.debug:
+        var: container_status.stdout
+
+    - name: Deployment completed
+      ansible.builtin.debug:
+        msg: "Smart Resource Booking deployment completed successfully"
