@@ -2503,3 +2503,269 @@ textarea:focus {
     font-size: 0.82rem;
     color: #94a3b8;
 }
+
+/* =========================================================
+   PHONE & OTP LOGIN TABS AND CONTROLS
+   ========================================================= */
+
+.auth-tabs {
+    display: flex;
+    gap: 8px;
+    background: #f1f5f9;
+    padding: 4px;
+    border-radius: 10px;
+    margin-bottom: 22px;
+}
+
+.auth-tab-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 9px 12px;
+    border: none;
+    background: transparent;
+    color: #64748b;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+}
+
+.auth-tab-btn.active {
+    background: #ffffff;
+    color: #1e3a8a;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.phone-input-group {
+    display: flex;
+    align-items: stretch;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    background: #ffffff;
+}
+
+.phone-input-group:focus-within {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.phone-prefix {
+    background: #f8fafc;
+    border-right: 1px solid #cbd5e1;
+    padding: 0 14px;
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    color: #475569;
+    font-size: 0.9rem;
+    user-select: none;
+}
+
+.phone-input-group input {
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    padding: 11px 14px !important;
+    font-size: 0.95rem;
+    flex: 1;
+}
+
+.otp-alert-box {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-bottom: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.86rem;
+    color: #1e40af;
+}
+
+.otp-change-link {
+    font-size: 0.8rem;
+    color: #2563eb;
+    font-weight: 600;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.otp-digit-input {
+    letter-spacing: 12px;
+    font-size: 1.4rem !important;
+    text-align: center;
+    font-weight: 700;
+    color: #1e3a8a;
+}
+
+/* =========================================================
+   REQUESTER CONTACT CHIPS (ADMIN VIEW)
+   ========================================================= */
+
+.requester-cell {
+    min-width: 220px;
+}
+
+.requester-header {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-bottom: 6px;
+}
+
+.requester-avatar {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #2563eb;
+    color: white;
+    font-weight: 700;
+    font-size: 0.76rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.requester-name {
+    font-size: 0.92rem;
+    color: #172554;
+    display: block;
+    line-height: 1.2;
+}
+
+.requester-dept {
+    font-size: 0.75rem;
+    color: #64748b;
+    font-weight: 500;
+}
+
+.requester-contact-chips {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.contact-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.78rem;
+    color: #334155;
+    text-decoration: none;
+    padding: 3px 8px;
+    border-radius: 5px;
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    width: fit-content;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.contact-chip:hover {
+    background: #e0f2fe;
+    color: #0369a1;
+    border-color: #bae6fd;
+}
+
+.contact-phone {
+    font-weight: 600;
+    color: #1e40af;
+}
+
+.contact-phone:hover {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.contact-chip-muted {
+    color: #94a3b8;
+    background: transparent;
+    border-color: transparent;
+}
+
+/* =========================================================
+   CONTACT DETAILS EDIT MODAL
+   ========================================================= */
+
+.contact-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2500;
+    padding: 16px;
+}
+
+.contact-modal-card {
+    background: #ffffff;
+    border-radius: 16px;
+    max-width: 480px;
+    width: 100%;
+    padding: 26px;
+    box-shadow: 0 20px 45px rgba(15, 23, 42, 0.25);
+    border: 1px solid #e2e8f0;
+    animation: modalSlideIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.96);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.contact-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.contact-modal-header h3 {
+    margin: 0;
+    font-size: 1.15rem;
+    color: #172554;
+}
+
+.contact-modal-close {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    color: #94a3b8;
+    cursor: pointer;
+    line-height: 1;
+    padding: 2px 8px;
+    border-radius: 6px;
+    transition: color 0.15s ease, background 0.15s ease;
+}
+
+.contact-modal-close:hover {
+    color: #1e293b;
+    background: #f1f5f9;
+}
+
+.modal-button-row {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 22px;
+    padding-top: 14px;
+    border-top: 1px solid #e2e8f0;
+}

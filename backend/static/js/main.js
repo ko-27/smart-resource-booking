@@ -153,4 +153,61 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    // 8. Contact Details Edit Modal
+    window.openContactModal = function () {
+        const modal = document.getElementById("contactModal");
+        if (modal) {
+            modal.style.display = "flex";
+            if (profilePopover) {
+                profilePopover.classList.remove("show");
+                if (profileBtn) profileBtn.setAttribute("aria-expanded", "false");
+            }
+            const phoneInput = document.getElementById("contact_phone");
+            if (phoneInput) phoneInput.focus();
+        }
+    };
+
+    window.closeContactModal = function () {
+        const modal = document.getElementById("contactModal");
+        if (modal) {
+            modal.style.display = "none";
+        }
+    };
+
+    // Close modal on outside click or escape
+    const contactModal = document.getElementById("contactModal");
+    if (contactModal) {
+        contactModal.addEventListener("click", function (event) {
+            if (event.target === contactModal) {
+                closeContactModal();
+            }
+        });
+
+        document.addEventListener("keydown", function (event) {
+            if (event.key === "Escape" && contactModal.style.display !== "none") {
+                closeContactModal();
+            }
+        });
+    }
+
 });
+
+// Global login tab switch function
+window.setLoginMethod = function (method) {
+    const emailForm = document.getElementById("emailLoginForm");
+    const phoneForm = document.getElementById("phoneLoginForm");
+    const tabEmail = document.getElementById("tabBtnEmail");
+    const tabPhone = document.getElementById("tabBtnPhone");
+
+    if (method === "phone") {
+        if (emailForm) emailForm.style.display = "none";
+        if (phoneForm) phoneForm.style.display = "block";
+        if (tabEmail) tabEmail.classList.remove("active");
+        if (tabPhone) tabPhone.classList.add("active");
+    } else {
+        if (emailForm) emailForm.style.display = "block";
+        if (phoneForm) phoneForm.style.display = "none";
+        if (tabEmail) tabEmail.classList.add("active");
+        if (tabPhone) tabPhone.classList.remove("active");
+    }
+};
