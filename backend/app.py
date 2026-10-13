@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from flask_login import current_user, login_required
 
 from .config import Config
@@ -7,6 +7,7 @@ from .models import User, Resource, Booking
 from .auth import auth
 from .resources import resources
 from .bookings import bookings
+from .services import update_booking_lifecycles, start_booking_lifecycle_scheduler
 
 def create_app(test_config=None):
 
@@ -28,6 +29,20 @@ def create_app(test_config=None):
     app.register_blueprint(resources)
     app.register_blueprint(bookings)
 
+    # Automatic booking lifecycle scheduler (runs periodically in background)
+    start_booking_lifecycle_scheduler(app, interval_seconds=30)
+
+    # Automatic booking lifecycle check on incoming web requests
+    @app.before_request
+    def check_booking_lifecycles():
+        if app.config.get("TESTING"):
+            return
+        if not request.path.startswith("/static"):
+            try:
+                update_booking_lifecycles()
+            except Exception:
+                db.session.rollback()
+
     @app.route("/")
     def home():
         return render_template("index.html")
@@ -48,12 +63,22 @@ def create_app(test_config=None):
                 status="PENDING"
             ).count()
 
+            completed_count = Booking.query.filter_by(
+                status="COMPLETED"
+            ).count()
+
+            expired_count = Booking.query.filter_by(
+                status="EXPIRED"
+            ).count()
+
             return render_template(
                 "dashboard.html",
                 user=current_user,
                 resource_count=resource_count,
                 booked_count=booked_count,
-                pending_count=pending_count
+                pending_count=pending_count,
+                completed_count=completed_count,
+                expired_count=expired_count
             )
 
         requested_count = Booking.query.filter_by(
@@ -63,6 +88,11 @@ def create_app(test_config=None):
         approved_count = Booking.query.filter_by(
             user_id=current_user.id,
             status="BOOKED"
+        ).count()
+
+        completed_count = Booking.query.filter_by(
+            user_id=current_user.id,
+            status="COMPLETED"
         ).count()
 
         rejected_count = Booking.query.filter_by(
@@ -75,13 +105,20 @@ def create_app(test_config=None):
             status="CANCELLED"
         ).count()
 
+        expired_count = Booking.query.filter_by(
+            user_id=current_user.id,
+            status="EXPIRED"
+        ).count()
+
         return render_template(
             "dashboard.html",
             user=current_user,
             requested_count=requested_count,
             approved_count=approved_count,
+            completed_count=completed_count,
             rejected_count=rejected_count,
-            cancelled_count=cancelled_count
+            cancelled_count=cancelled_count,
+            expired_count=expired_count
         )
 
     @app.errorhandler(404)

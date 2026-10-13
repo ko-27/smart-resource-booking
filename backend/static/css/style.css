@@ -2015,6 +2015,14 @@ a:hover {
     border-top: 4px solid #64748b;
 }
 
+.summary-completed {
+    border-top: 4px solid #2563eb;
+}
+
+.summary-expired {
+    border-top: 4px solid #94a3b8;
+}
+
 @media (max-width: 900px) {
 
     .booking-summary-grid {
@@ -2068,3 +2076,192 @@ a:hover {
     line-height: 1.7;
 }
 
+
+
+/* =========================================================
+   ENHANCED MODERN UI & BOOKING LIFECYCLE EXTENSIONS
+   (Preserving original color palette exactly)
+   ========================================================= */
+
+/* New Status Badges */
+.status-badge {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.3px !important;
+    border: 1px solid transparent !important;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05) !important;
+}
+
+.status-badge::before {
+    content: "";
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: currentColor;
+}
+
+.status-completed,
+.badge-completed {
+    background: #e0e7ff !important;
+    color: #3730a3 !important;
+    border-color: #c7d2fe !important;
+}
+
+.status-expired,
+.badge-expired {
+    background: #f1f5f9 !important;
+    color: #64748b !important;
+    border-color: #cbd5e1 !important;
+}
+
+.status-pending,
+.badge-pending {
+    border-color: #fde68a !important;
+}
+
+.status-booked,
+.badge-booked {
+    border-color: #bbf7d0 !important;
+}
+
+.status-rejected {
+    border-color: #fecaca !important;
+}
+
+.status-cancelled {
+    border-color: #cbd5e1 !important;
+}
+
+/* New Summary Card Types */
+.summary-completed {
+    border-top: 4px solid #2563eb !important;
+}
+
+.summary-expired {
+    border-top: 4px solid #94a3b8 !important;
+}
+
+.booking-summary-grid {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)) !important;
+}
+
+/* Modern typography, elevations, transitions */
+:root {
+    --font-stack: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+    font-family: var(--font-stack);
+    letter-spacing: -0.01em;
+}
+
+.navbar {
+    backdrop-filter: blur(8px);
+}
+
+.card,
+.stat-card,
+.booking-summary-card,
+.form-card,
+.table-card {
+    border: 1px solid rgba(226, 232, 240, 0.9) !important;
+    box-shadow: 0 4px 20px rgba(15, 23, 42, 0.05) !important;
+    transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s ease !important;
+}
+
+.card:hover,
+.stat-card:hover,
+.booking-summary-card:hover {
+    transform: translateY(-4px) !important;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.1) !important;
+}
+
+/* Modern Form Controls */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="date"],
+input[type="time"],
+select,
+textarea {
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 9px !important;
+    padding: 11px 14px !important;
+    font-family: inherit;
+    font-size: 0.95rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none !important;
+    border-color: #2563eb !important;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15) !important;
+}
+
+/* Button micro-interactions */
+.btn {
+    transition: transform 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease !important;
+}
+
+.btn:active {
+    transform: scale(0.97) !important;
+}
+
+/* Modern Table Polish */
+.booking-table thead th,
+.resource-table thead th {
+    background: #f8fafc;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    color: #475569;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.booking-table tbody tr,
+.resource-table tbody tr {
+    transition: background-color 0.18s ease;
+}
+
+.booking-table tbody tr:hover,
+.resource-table tbody tr:hover {
+    background-color: #f8fafc;
+}
+
+/* Subtle entrance animation */
+@keyframes modernEntrance {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.page-header,
+.dashboard-hero,
+.dashboard-stats,
+.booking-summary-grid,
+.table-card,
+.form-card {
+    animation: modernEntrance 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Accessible motion preference */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+    }
+}

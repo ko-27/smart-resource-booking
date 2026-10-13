@@ -282,12 +282,18 @@ def cancel_booking(booking_id):
             url_for("bookings.list_bookings")
         )
 
-    if booking.status == "CANCELLED":
+    if booking.status not in ["PENDING", "BOOKED"]:
 
-        flash(
-            "Booking is already cancelled.",
-            "error"
-        )
+        if booking.status == "CANCELLED":
+            flash(
+                "Booking is already cancelled.",
+                "error"
+            )
+        else:
+            flash(
+                f"Cannot cancel a booking that is {booking.status.lower()}.",
+                "error"
+            )
 
         return redirect(
             url_for("bookings.list_bookings")

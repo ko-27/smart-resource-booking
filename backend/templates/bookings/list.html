@@ -143,28 +143,42 @@
                 </option>
 
                 <option value="PENDING"
-                    {% if status == "PENDING" %}
+                    {% if status_filter == "PENDING" or status == "PENDING" %}
                         selected
                     {% endif %}>
                     Pending
                 </option>
 
                 <option value="BOOKED"
-                    {% if status == "BOOKED" %}
+                    {% if status_filter == "BOOKED" or status == "BOOKED" %}
                         selected
                     {% endif %}>
                     Approved / Booked
                 </option>
 
+                <option value="COMPLETED"
+                    {% if status_filter == "COMPLETED" or status == "COMPLETED" %}
+                        selected
+                    {% endif %}>
+                    Completed
+                </option>
+
+                <option value="EXPIRED"
+                    {% if status_filter == "EXPIRED" or status == "EXPIRED" %}
+                        selected
+                    {% endif %}>
+                    Expired
+                </option>
+
                 <option value="REJECTED"
-                    {% if status == "REJECTED" %}
+                    {% if status_filter == "REJECTED" or status == "REJECTED" %}
                         selected
                     {% endif %}>
                     Rejected
                 </option>
 
                 <option value="CANCELLED"
-                    {% if status == "CANCELLED" %}
+                    {% if status_filter == "CANCELLED" or status == "CANCELLED" %}
                         selected
                     {% endif %}>
                     Cancelled
@@ -212,7 +226,7 @@
                 {% if current_user.role == "ADMIN" %}
                     Awaiting approval
                 {% else %}
-                    Awaiting administrator review
+                    Awaiting review
                 {% endif %}
             </small>
 
@@ -222,11 +236,7 @@
         <div class="booking-summary-card summary-booked">
 
             <span class="summary-label">
-                {% if current_user.role == "ADMIN" %}
-                    Approved
-                {% else %}
-                    Approved
-                {% endif %}
+                Active Booked
             </span>
 
             <strong>
@@ -234,7 +244,41 @@
             </strong>
 
             <small>
-                Confirmed bookings
+                Active reservations
+            </small>
+
+        </div>
+
+
+        <div class="booking-summary-card summary-completed">
+
+            <span class="summary-label">
+                Completed
+            </span>
+
+            <strong>
+                {{ bookings | selectattr("status", "equalto", "COMPLETED") | list | length }}
+            </strong>
+
+            <small>
+                Finished reservations
+            </small>
+
+        </div>
+
+
+        <div class="booking-summary-card summary-expired">
+
+            <span class="summary-label">
+                Expired
+            </span>
+
+            <strong>
+                {{ bookings | selectattr("status", "equalto", "EXPIRED") | list | length }}
+            </strong>
+
+            <small>
+                Unapproved expired
             </small>
 
         </div>
@@ -251,7 +295,7 @@
             </strong>
 
             <small>
-                Requests not approved
+                Rejected requests
             </small>
 
         </div>
@@ -380,13 +424,25 @@
                             {% if booking.status == "PENDING" %}
 
                                 <span class="status-badge status-pending">
-                                    PENDING
+                                     PENDING
                                 </span>
 
                             {% elif booking.status == "BOOKED" %}
 
                                 <span class="status-badge status-booked">
                                     BOOKED
+                                </span>
+
+                            {% elif booking.status == "COMPLETED" %}
+
+                                <span class="status-badge status-completed">
+                                    COMPLETED
+                                </span>
+
+                            {% elif booking.status == "EXPIRED" %}
+
+                                <span class="status-badge status-expired">
+                                    EXPIRED
                                 </span>
 
                             {% elif booking.status == "REJECTED" %}
