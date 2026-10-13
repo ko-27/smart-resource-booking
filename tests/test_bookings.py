@@ -438,3 +438,46 @@ def test_cancelled_booking_does_not_block_new_booking(
 
     assert len(cancelled_bookings) == 1
     assert len(pending_bookings) == 1
+
+def test_admin_can_view_cancel_button_and_cancel_booked_reservation(
+    client,
+    users_and_resource
+):
+    from datetime import date, time, timedelta
+    user_id, admin_id, resource_id = users_and_resource
+
+    # Create a BOOKED reservation
+    with client.application.app_context():
+        booking = Booking(
+            user_id=user_id,
+            resource_id=resource_id,
+            booking_date=date.today() + timedelta(days=2),
+            start_time=time(14, 0),
+            end_time=time(16, 0),
+            purpose="Approved Faculty Review",
+            status="BOOKED"
+        )
+        db.session.add(booking)
+        db.session.commit()
+        b_id = booking.id
+
+    # Admin logs in
+    with client.session_transaction() as sess:
+        sess["_user_id"] = str(admin_id)
+        sess["_fresh"] = True
+
+    # 1. Verify admin sees Cancel button on bookings list page for BOOKED reservation
+    resp = client.get("/bookings/", follow_redirects=True)
+    assert resp.status_code == 200
+    html = resp.data.decode("utf-8")
+    assert f"/bookings/cancel/{b_id}" in html, "Admin must see Cancel link for BOOKED reservation!"
+
+    # 2. Admin cancels the BOOKED reservation
+    cancel_resp = client.get(f"/bookings/cancel/{b_id}", follow_redirects=True)
+    assert cancel_resp.status_code == 200
+    assert b"Booking cancelled successfully." in cancel_resp.data
+
+    # 3. Verify in database
+    with client.application.app_context():
+        updated = db.session.get(Booking, b_id)
+        assert updated.status == "CANCELLED"
