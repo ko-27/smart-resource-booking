@@ -10,8 +10,10 @@
 
     <title>Resources - Smart Resource Booking</title>
 
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='img/favicon.svg') }}">
+
     <link rel="stylesheet"
-          href="{{ url_for('static', filename='css/style.css', v='4') }}">
+          href="{{ url_for('static', filename='css/style.css', v='7') }}">
 
 </head>
 
@@ -22,7 +24,8 @@
 <nav class="navbar">
 
     <div class="brand">
-        Smart Resource Booking
+        <img src="{{ url_for('static', filename='img/icon.svg') }}" class="brand-icon" alt="Logo">
+        <span>Smart Resource Booking</span>
     </div>
 
     <div class="nav-links">
@@ -39,7 +42,51 @@
             {% endif %}
         </a>
 
-        <a href="{{ url_for('auth.logout') }}">Logout</a>
+        <!-- Profile Dropdown Trigger -->
+        <div class="profile-dropdown-container">
+            <button class="profile-trigger-btn" id="profileDropdownBtn" type="button" aria-haspopup="true" aria-expanded="false" title="View Profile">
+                <span class="avatar-badge">{{ current_user.name[:1] | upper }}</span>
+                <span class="profile-name-text">{{ current_user.name.split(' ')[0] }}</span>
+                <svg class="chevron-icon" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+
+            <div class="profile-popover-card" id="profilePopover" role="menu">
+                <div class="popover-user-header">
+                    <div class="popover-avatar-lg">{{ current_user.name[:1] | upper }}</div>
+                    <div class="popover-user-meta">
+                        <div class="popover-name">{{ current_user.name }}</div>
+                        <div class="popover-email">{{ current_user.email }}</div>
+                    </div>
+                </div>
+
+                <div class="popover-divider"></div>
+
+                <div class="popover-details">
+                    <div class="popover-row">
+                        <span class="popover-label">Role</span>
+                        <span class="badge">{{ current_user.role }}</span>
+                    </div>
+                    <div class="popover-row">
+                        <span class="popover-label">Department</span>
+                        <span class="popover-value">{{ current_user.department }}</span>
+                    </div>
+                    {% if current_user.phone %}
+                    <div class="popover-row">
+                        <span class="popover-label">Phone</span>
+                        <span class="popover-value">{{ current_user.phone }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="popover-divider"></div>
+
+                <div class="popover-actions">
+                    <a href="{{ url_for('auth.logout') }}" class="btn btn-secondary btn-small" style="width: 100%;">
+                        Sign Out
+                    </a>
+                </div>
+            </div>
+        </div>
 
     </div>
 
@@ -466,11 +513,29 @@
 
 <footer class="footer">
 
-    <strong>Smart Resource Booking Platform</strong>
+    <div class="footer-content">
 
-    <br>
+        <div class="footer-brand">
+            <div class="footer-logo">
+                <img src="{{ url_for('static', filename='img/icon.svg') }}" width="24" height="24" alt="Logo">
+                <strong>Smart Resource Booking Platform</strong>
+            </div>
+            <p class="footer-tagline">
+                Centralized institutional resource allocation, scheduling, and lifecycle management.
+            </p>
+        </div>
 
-    Resource inventory and allocation management
+        <div class="footer-status">
+            <span class="status-indicator-dot"></span>
+            <span class="status-text">System Operational</span>
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+        <span>&copy; 2026 Smart Resource Booking. All rights reserved.</span>
+        <span>Version 2.0 &bull; Automated CI/CD Enabled</span>
+    </div>
 
 </footer>
 

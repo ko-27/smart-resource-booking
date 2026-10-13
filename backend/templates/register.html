@@ -10,8 +10,10 @@
 
     <title>Register - Smart Resource Booking</title>
 
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='img/favicon.svg') }}">
+
     <link rel="stylesheet"
-          href="{{ url_for('static', filename='css/style.css', v='4') }}">
+          href="{{ url_for('static', filename='css/style.css', v='7') }}">
 
 </head>
 
@@ -22,6 +24,10 @@
 
 
     <div class="auth-logo">
+
+        <div style="display: flex; justify-content: center; margin-bottom: 14px;">
+            <img src="{{ url_for('static', filename='img/icon.svg') }}" width="48" height="48" alt="Logo">
+        </div>
 
         <h1>Smart Resource Booking</h1>
 

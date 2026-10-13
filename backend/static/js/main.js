@@ -126,4 +126,31 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
+    // 7. Profile dropdown / popover toggle
+    const profileBtn = document.getElementById("profileDropdownBtn");
+    const profilePopover = document.getElementById("profilePopover");
+
+    if (profileBtn && profilePopover) {
+        profileBtn.addEventListener("click", function (event) {
+            event.stopPropagation();
+            const isOpen = profilePopover.classList.toggle("show");
+            profileBtn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+        });
+
+        document.addEventListener("click", function (event) {
+            if (!profilePopover.contains(event.target) && !profileBtn.contains(event.target)) {
+                profilePopover.classList.remove("show");
+                profileBtn.setAttribute("aria-expanded", "false");
+            }
+        });
+
+        document.addEventListener("keydown", function (event) {
+            if (event.key === "Escape" && profilePopover.classList.contains("show")) {
+                profilePopover.classList.remove("show");
+                profileBtn.setAttribute("aria-expanded", "false");
+                profileBtn.focus();
+            }
+        });
+    }
+
 });

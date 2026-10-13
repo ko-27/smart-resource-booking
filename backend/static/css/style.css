@@ -2272,3 +2272,234 @@ textarea:focus {
     font-weight: 700 !important;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
 }
+
+
+/* =========================================================
+   HEADER PROFILE DROPDOWN & MODERN FOOTER STYLES
+   ========================================================= */
+
+/* Brand & Icon */
+.brand {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+}
+
+.brand-icon {
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+}
+
+/* Header Profile Popover */
+.profile-dropdown-container {
+    position: relative;
+    display: inline-block;
+}
+
+.profile-trigger-btn {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    color: white;
+    padding: 5px 12px 5px 6px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.88rem;
+    font-weight: 600;
+    transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.profile-trigger-btn:hover {
+    background: rgba(255, 255, 255, 0.22);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.avatar-badge {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #2563eb;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.82rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+.chevron-icon {
+    transition: transform 0.2s ease;
+}
+
+.profile-trigger-btn[aria-expanded="true"] .chevron-icon {
+    transform: rotate(180deg);
+}
+
+.profile-popover-card {
+    position: absolute;
+    top: calc(100% + 12px);
+    right: 0;
+    width: 290px;
+    background: #ffffff;
+    color: #172033;
+    border-radius: 16px;
+    box-shadow: 0 16px 36px rgba(15, 23, 42, 0.18), 0 2px 8px rgba(15, 23, 42, 0.08);
+    border: 1px solid #e2e8f0;
+    padding: 20px;
+    z-index: 1200;
+    display: none;
+    opacity: 0;
+    transform: translateY(-8px) scale(0.98);
+    transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.profile-popover-card.show {
+    display: block;
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+.popover-user-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.popover-avatar-lg {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #2563eb, #1e3a8a);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.15rem;
+    font-weight: 700;
+    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+    flex-shrink: 0;
+}
+
+.popover-name {
+    font-weight: 700;
+    font-size: 0.98rem;
+    color: #172554;
+    line-height: 1.2;
+}
+
+.popover-email {
+    font-size: 0.8rem;
+    color: #64748b;
+    word-break: break-all;
+    margin-top: 3px;
+}
+
+.popover-divider {
+    height: 1px;
+    background: #e2e8f0;
+    margin: 14px 0;
+}
+
+.popover-details {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+.popover-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+}
+
+.popover-label {
+    color: #64748b;
+    font-weight: 500;
+}
+
+.popover-value {
+    font-weight: 600;
+    color: #172033;
+}
+
+/* Modern Enterprise Footer */
+.footer {
+    background: #172554 !important;
+    color: #cbd5e1 !important;
+    padding: 36px 5% 22px !important;
+    margin-top: 50px !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+    text-align: left !important;
+}
+
+.footer-content {
+    max-width: 1180px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding-bottom: 20px;
+}
+
+.footer-brand {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.footer-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.05rem;
+    color: white;
+}
+
+.footer-tagline {
+    font-size: 0.85rem;
+    color: #94a3b8;
+    max-width: 480px;
+}
+
+.footer-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.07);
+    padding: 6px 14px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    font-size: 0.82rem;
+    color: #e2e8f0;
+}
+
+.status-indicator-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #22c55e;
+    box-shadow: 0 0 8px #22c55e;
+}
+
+.footer-bottom {
+    max-width: 1180px;
+    margin: 0 auto;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 0.82rem;
+    color: #94a3b8;
+}

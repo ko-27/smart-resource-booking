@@ -10,8 +10,10 @@
 
     <title>Smart Resource Booking</title>
 
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='img/favicon.svg') }}">
+
     <link rel="stylesheet"
-          href="{{ url_for('static', filename='css/style.css', v='4') }}">
+          href="{{ url_for('static', filename='css/style.css', v='7') }}">
 
 </head>
 
@@ -22,7 +24,8 @@
 <nav class="navbar">
 
     <div class="brand">
-        Smart Resource Booking
+        <img src="{{ url_for('static', filename='img/icon.svg') }}" class="brand-icon" alt="Logo">
+        <span>Smart Resource Booking</span>
     </div>
 
     <div class="nav-links">
@@ -150,13 +153,29 @@
 
 <footer class="footer">
 
-    <strong>
-        Smart Resource Booking Platform
-    </strong>
+    <div class="footer-content">
 
-    <br>
+        <div class="footer-brand">
+            <div class="footer-logo">
+                <img src="{{ url_for('static', filename='img/icon.svg') }}" width="24" height="24" alt="Logo">
+                <strong>Smart Resource Booking Platform</strong>
+            </div>
+            <p class="footer-tagline">
+                Centralized institutional resource allocation, scheduling, and lifecycle management.
+            </p>
+        </div>
 
-    Digital resource allocation and booking management system
+        <div class="footer-status">
+            <span class="status-indicator-dot"></span>
+            <span class="status-text">System Operational</span>
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+        <span>&copy; 2026 Smart Resource Booking. All rights reserved.</span>
+        <span>Version 2.0 &bull; Automated CI/CD Enabled</span>
+    </div>
 
 </footer>
 
