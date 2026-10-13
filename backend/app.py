@@ -71,6 +71,11 @@ def create_app(test_config=None):
                 status="EXPIRED"
             ).count()
 
+            recent_bookings = Booking.query.order_by(
+                Booking.booking_date.desc(),
+                Booking.start_time.desc()
+            ).limit(5).all()
+
             return render_template(
                 "dashboard.html",
                 user=current_user,
@@ -78,7 +83,8 @@ def create_app(test_config=None):
                 booked_count=booked_count,
                 pending_count=pending_count,
                 completed_count=completed_count,
-                expired_count=expired_count
+                expired_count=expired_count,
+                recent_bookings=recent_bookings
             )
 
         requested_count = Booking.query.filter_by(
@@ -110,6 +116,13 @@ def create_app(test_config=None):
             status="EXPIRED"
         ).count()
 
+        recent_bookings = Booking.query.filter_by(
+            user_id=current_user.id
+        ).order_by(
+            Booking.booking_date.desc(),
+            Booking.start_time.desc()
+        ).limit(5).all()
+
         return render_template(
             "dashboard.html",
             user=current_user,
@@ -118,7 +131,8 @@ def create_app(test_config=None):
             completed_count=completed_count,
             rejected_count=rejected_count,
             cancelled_count=cancelled_count,
-            expired_count=expired_count
+            expired_count=expired_count,
+            recent_bookings=recent_bookings
         )
 
     @app.errorhandler(404)

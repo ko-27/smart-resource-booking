@@ -326,3 +326,49 @@ def test_resource_search(
     assert response.status_code == 200
 
     assert b"Seminar Hall A" in response.data
+
+
+def test_admin_can_activate_resource(client, admin_user):
+    with client.application.app_context():
+        resource = Resource(
+            name="Testing Lab",
+            resource_type="LAB",
+            location="IT Block",
+            capacity=40,
+            status="UNAVAILABLE",
+            created_by=admin_user
+        )
+        db.session.add(resource)
+        db.session.commit()
+        res_id = resource.id
+
+    login(client, "admin@test.com", "Admin@123")
+    response = client.get(f"/resources/activate/{res_id}", follow_redirects=True)
+    assert response.status_code == 200
+
+    with client.application.app_context():
+        r = db.session.get(Resource, res_id)
+        assert r.status == "AVAILABLE"
+
+
+def test_user_cannot_activate_resource(client, normal_user, admin_user):
+    with client.application.app_context():
+        resource = Resource(
+            name="Restricted Lab",
+            resource_type="LAB",
+            location="IT Block",
+            capacity=40,
+            status="UNAVAILABLE",
+            created_by=admin_user
+        )
+        db.session.add(resource)
+        db.session.commit()
+        res_id = resource.id
+
+    login(client, "user@test.com", "User@123")
+    response = client.get(f"/resources/activate/{res_id}", follow_redirects=True)
+    assert response.status_code == 200
+
+    with client.application.app_context():
+        r = db.session.get(Resource, res_id)
+        assert r.status == "UNAVAILABLE"

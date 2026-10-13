@@ -40,7 +40,7 @@
             Resources
         </a>
 
-        <a href="{{ url_for('bookings.list_bookings') }}">
+        <a href="{{ url_for('bookings.list_bookings') }}" class="active">
             {% if current_user.role == "ADMIN" %}
                 Booking Requests
             {% else %}

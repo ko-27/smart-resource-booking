@@ -27,7 +27,7 @@
 
     <div class="nav-links">
 
-        <a href="{{ url_for('dashboard') }}">
+        <a href="{{ url_for('dashboard') }}" class="active">
             Dashboard
         </a>
 
@@ -473,6 +473,91 @@
 
     {% endif %}
 
+
+    <!-- Recent Activity -->
+    <div class="card recent-activity-card">
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 10px;">
+            <h2 style="margin-bottom: 0;">
+                {% if user.role == "ADMIN" %}
+                    Recent Booking Activity
+                {% else %}
+                    My Recent Bookings
+                {% endif %}
+            </h2>
+
+            <a href="{{ url_for('bookings.list_bookings') }}"
+               class="btn btn-secondary btn-small">
+                View All &rarr;
+            </a>
+        </div>
+
+        {% if recent_bookings %}
+
+            <div class="table-wrapper">
+
+                <table class="booking-table">
+
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            {% if user.role == "ADMIN" %}
+                                <th>Requested By</th>
+                            {% endif %}
+                            <th>Resource</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for b in recent_bookings %}
+                            <tr>
+                                <td class="booking-id">#{{ b.id }}</td>
+                                {% if user.role == "ADMIN" %}
+                                    <td class="requester-cell">
+                                        <strong>{{ b.user.name }}</strong>
+                                        <span>{{ b.user.email }}</span>
+                                    </td>
+                                {% endif %}
+                                <td>{{ b.resource.name }}</td>
+                                <td class="date-cell">{{ b.booking_date }}</td>
+                                <td class="time-cell">{{ b.start_time }} - {{ b.end_time }}</td>
+                                <td>
+                                    {% if b.status == "PENDING" %}
+                                        <span class="status-badge status-pending">PENDING</span>
+                                    {% elif b.status == "BOOKED" %}
+                                        <span class="status-badge status-booked">BOOKED</span>
+                                    {% elif b.status == "COMPLETED" %}
+                                        <span class="status-badge status-completed">COMPLETED</span>
+                                    {% elif b.status == "EXPIRED" %}
+                                        <span class="status-badge status-expired">EXPIRED</span>
+                                    {% elif b.status == "REJECTED" %}
+                                        <span class="status-badge status-rejected">REJECTED</span>
+                                    {% elif b.status == "CANCELLED" %}
+                                        <span class="status-badge status-cancelled">CANCELLED</span>
+                                    {% else %}
+                                        <span class="status-badge">{{ b.status }}</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        {% else %}
+
+            <p style="color: #64748b; margin-top: 10px;">
+                No recent booking activity recorded yet.
+            </p>
+
+        {% endif %}
+
+    </div>
 
 </main>
 

@@ -29,7 +29,7 @@
 
         <a href="{{ url_for('dashboard') }}">Dashboard</a>
 
-        <a href="{{ url_for('resources.list_resources') }}">Resources</a>
+        <a href="{{ url_for('resources.list_resources') }}" class="active">Resources</a>
 
         <a href="{{ url_for('bookings.list_bookings') }}">
             {% if current_user.role == "ADMIN" %}
@@ -368,13 +368,25 @@
 
                             </a>
 
-                            {% if resource.status != "UNAVAILABLE" %}
+                            {% if resource.status != "AVAILABLE" %}
+
+                                <a href="{{ url_for(
+                                    'resources.activate_resource',
+                                    resource_id=resource.id
+                                ) }}"
+                                   class="btn btn-success btn-small">
+
+                                    Activate
+
+                                </a>
+
+                            {% else %}
 
                                 <a href="{{ url_for(
                                     'resources.deactivate_resource',
                                     resource_id=resource.id
                                 ) }}"
-                                   class="btn btn-danger">
+                                   class="btn btn-danger btn-small">
 
                                     Deactivate
 

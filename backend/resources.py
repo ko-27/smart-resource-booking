@@ -338,3 +338,50 @@ def deactivate_resource(resource_id):
     return redirect(
         url_for("resources.list_resources")
     )
+
+
+@resources.route(
+    "/activate/<int:resource_id>"
+)
+@login_required
+def activate_resource(resource_id):
+
+    if current_user.role != "ADMIN":
+
+        flash(
+            "Administrator access required.",
+            "error"
+        )
+
+        return redirect(
+            url_for("resources.list_resources")
+        )
+
+    resource = db.session.get(
+        Resource,
+        resource_id
+    )
+
+    if resource is None:
+
+        flash(
+            "Resource not found.",
+            "error"
+        )
+
+        return redirect(
+            url_for("resources.list_resources")
+        )
+
+    resource.status = "AVAILABLE"
+
+    db.session.commit()
+
+    flash(
+        "Resource marked as available.",
+        "success"
+    )
+
+    return redirect(
+        url_for("resources.list_resources")
+    )
