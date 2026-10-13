@@ -228,3 +228,58 @@ def test_edit_profile_contact_details(client, app):
         assert u.name == "Contact User Updated"
         assert u.department == "Robotics"
         assert u.phone == "9998887776"
+
+
+def test_registration_with_phone_otp_verification(client, app):
+
+    # 1. Initiate registration with OTP verification
+    resp = client.post(
+        "/register",
+        data={
+            "name": "Verified Registrant",
+            "email": "verified@cit.edu.in",
+            "department": "ECE",
+            "phone": "9811223344",
+            "password": "SecurePassword@1",
+            "require_otp": "true"
+        },
+        follow_redirects=False
+    )
+    assert resp.status_code == 302
+    assert "step=verify" in resp.headers["Location"]
+
+    with client.session_transaction() as sess:
+        otp_code = sess.get("reg_otp")
+        assert otp_code is not None
+        assert len(otp_code) == 6
+
+    # 2. Try invalid OTP first
+    invalid_resp = client.post(
+        "/register/verify-otp",
+        data={"otp": "999999" if otp_code != "999999" else "888888"},
+        follow_redirects=True
+    )
+    assert invalid_resp.status_code == 200
+    assert b"Invalid OTP" in invalid_resp.data
+
+    with app.app_context():
+        # User should NOT be created yet
+        assert User.query.filter_by(email="verified@cit.edu.in").first() is None
+
+    # 3. Enter correct OTP
+    valid_resp = client.post(
+        "/register/verify-otp",
+        data={"otp": otp_code},
+        follow_redirects=False
+    )
+    assert valid_resp.status_code == 302
+    assert "/login" in valid_resp.headers["Location"]
+
+    # 4. User should now exist with phone verified!
+    with app.app_context():
+        new_user = User.query.filter_by(email="verified@cit.edu.in").first()
+        assert new_user is not None
+        assert new_user.name == "Verified Registrant"
+        assert new_user.phone == "9811223344"
+        assert new_user.department == "ECE"
+        assert new_user.check_password("SecurePassword@1")

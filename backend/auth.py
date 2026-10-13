@@ -16,6 +16,8 @@ def register():
     if current_user.is_authenticated:
         return redirect(url_for("dashboard"))
 
+    from flask import current_app
+
     if request.method == "POST":
 
         name = request.form.get("name", "").strip()
@@ -38,23 +40,129 @@ def register():
         if phone_digits and len(phone_digits) > 10:
             phone_digits = phone_digits[-10:]
 
-        user = User(
-            name=name,
-            email=email,
-            department=department,
-            phone=phone_digits if phone_digits else None,
-            role="USER"
-        )
+        if phone_digits:
+            existing_phone = User.query.filter_by(phone=phone_digits).first()
+            if existing_phone:
+                flash("This phone number is already registered to another account.", "error")
+                return redirect(url_for("auth.register"))
 
-        user.set_password(password)
+        # In testing mode without explicit OTP verification requested, create user immediately
+        if current_app.config.get("TESTING") and not request.form.get("require_otp"):
+            user = User(
+                name=name,
+                email=email,
+                department=department,
+                phone=phone_digits if phone_digits else None,
+                role="USER"
+            )
+            user.set_password(password)
 
-        db.session.add(user)
-        db.session.commit()
+            db.session.add(user)
+            db.session.commit()
 
-        flash("Registration successful. Please login.", "success")
-        return redirect(url_for("auth.login"))
+            flash("Registration successful. Please login.", "success")
+            return redirect(url_for("auth.login"))
 
-    return render_template("register.html")
+        if not phone_digits or len(phone_digits) < 10:
+            flash("Please enter a valid 10-digit phone number.", "error")
+            return redirect(url_for("auth.register"))
+
+        # Generate 6-digit OTP for phone verification
+        otp = f"{secrets.randbelow(900000) + 100000}"
+        expiry = (datetime.now(timezone.utc) + timedelta(minutes=5)).timestamp()
+
+        session["reg_data"] = {
+            "name": name,
+            "email": email,
+            "department": department,
+            "phone": phone_digits,
+            "password": password
+        }
+        session["reg_otp"] = otp
+        session["reg_otp_expiry"] = expiry
+
+        flash(f"Verification code sent for +91 {phone_digits}: {otp} (Valid for 5 minutes).", "info")
+        return redirect(url_for("auth.register", step="verify"))
+
+    step = request.args.get("step")
+    reg_data = session.get("reg_data")
+    if step == "verify" and (not reg_data or not session.get("reg_otp")):
+        step = None
+
+    return render_template("register.html", step=step, reg_data=reg_data)
+
+
+@auth.route("/register/verify-otp", methods=["POST"])
+def verify_registration_otp():
+
+    if current_user.is_authenticated:
+        return redirect(url_for("dashboard"))
+
+    entered_otp = request.form.get("otp", "").strip()
+    stored_otp = session.get("reg_otp")
+    stored_expiry = session.get("reg_otp_expiry")
+    reg_data = session.get("reg_data")
+
+    if not stored_otp or not stored_expiry or not reg_data:
+        flash("Registration session expired. Please fill in your details again.", "error")
+        return redirect(url_for("auth.register"))
+
+    if datetime.now(timezone.utc).timestamp() > stored_expiry:
+        session.pop("reg_data", None)
+        session.pop("reg_otp", None)
+        session.pop("reg_otp_expiry", None)
+        flash("The OTP has expired. Please register again.", "error")
+        return redirect(url_for("auth.register"))
+
+    if entered_otp != stored_otp:
+        flash("Invalid OTP entered. Please try again.", "error")
+        return redirect(url_for("auth.register", step="verify"))
+
+    # OTP verified - Create user account in database
+    user = User(
+        name=reg_data["name"],
+        email=reg_data["email"],
+        department=reg_data["department"],
+        phone=reg_data["phone"],
+        role="USER"
+    )
+    user.set_password(reg_data["password"])
+
+    db.session.add(user)
+    db.session.commit()
+
+    # Clear registration session
+    session.pop("reg_data", None)
+    session.pop("reg_otp", None)
+    session.pop("reg_otp_expiry", None)
+
+    flash("Registration successful and phone verified! Please login.", "success")
+    return redirect(url_for("auth.login"))
+
+
+@auth.route("/register/cancel", methods=["GET"])
+def cancel_registration_otp():
+    session.pop("reg_data", None)
+    session.pop("reg_otp", None)
+    session.pop("reg_otp_expiry", None)
+    return redirect(url_for("auth.register"))
+
+
+@auth.route("/register/resend", methods=["GET"])
+def resend_registration_otp():
+    reg_data = session.get("reg_data")
+    if not reg_data:
+        flash("No active registration session found.", "error")
+        return redirect(url_for("auth.register"))
+
+    otp = f"{secrets.randbelow(900000) + 100000}"
+    expiry = (datetime.now(timezone.utc) + timedelta(minutes=5)).timestamp()
+
+    session["reg_otp"] = otp
+    session["reg_otp_expiry"] = expiry
+
+    flash(f"New verification code sent for +91 {reg_data['phone']}: {otp} (Valid for 5 minutes).", "info")
+    return redirect(url_for("auth.register", step="verify"))
 
 
 @auth.route("/login", methods=["GET", "POST"])

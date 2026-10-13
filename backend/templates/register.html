@@ -13,7 +13,7 @@
     <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='img/favicon.svg') }}">
 
     <link rel="stylesheet"
-          href="{{ url_for('static', filename='css/style.css', v='7') }}">
+          href="{{ url_for('static', filename='css/style.css', v='8') }}">
 
 </head>
 
@@ -40,9 +40,6 @@
 
     <div class="auth-card">
 
-        <h2>Create Account</h2>
-
-
         {% with messages = get_flashed_messages(with_categories=true) %}
 
             {% if messages %}
@@ -63,87 +60,166 @@
 
         {% endwith %}
 
+        {% if step == 'verify' and reg_data %}
 
-        <form method="POST">
+            <h2>Verify Phone Number</h2>
 
+            <form method="POST" action="{{ url_for('auth.verify_registration_otp') }}">
 
-            <div class="form-group">
+                <div class="otp-alert-box">
+                    <div>
+                        <div>Account for <strong>{{ reg_data.name }}</strong></div>
+                        <small style="color: #475569;">Code sent to <strong>+91 {{ reg_data.phone }}</strong></small>
+                    </div>
+                    <a href="{{ url_for('auth.cancel_registration_otp') }}" class="otp-change-link">Edit Details</a>
+                </div>
 
-                <label for="name">
-                    Full Name
-                </label>
+                <div class="form-group">
+                    <label for="otp">
+                        Enter 6-Digit OTP
+                    </label>
+                    <input
+                        type="text"
+                        id="otp"
+                        name="otp"
+                        placeholder="&bull; &bull; &bull; &bull; &bull; &bull;"
+                        maxlength="6"
+                        pattern="[0-9]{6}"
+                        class="otp-digit-input"
+                        required
+                        autofocus
+                    >
+                    <small class="form-help">Enter the 6-digit verification code sent to your phone.</small>
+                </div>
 
-                <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    placeholder="Enter your full name"
-                    required
-                >
+                <button type="submit"
+                        class="btn"
+                        style="width:100%;">
+                    Confirm &amp; Create Account
+                </button>
 
-            </div>
+                <div style="margin-top: 14px; text-align: center;">
+                    <a href="{{ url_for('auth.resend_registration_otp') }}" class="resend-link">
+                        Resend Verification Code
+                    </a>
+                </div>
 
+            </form>
 
-            <div class="form-group">
+        {% else %}
 
-                <label for="email">
-                    Email Address
-                </label>
+            <h2>Create Account</h2>
 
-                <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    placeholder="Enter your email"
-                    required
-                >
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label for="department">
-                    Department
-                </label>
-
-                <input
-                    type="text"
-                    id="department"
-                    name="department"
-                    placeholder="Example: IT"
-                    required
-                >
-
-            </div>
+            <form method="POST" action="{{ url_for('auth.register') }}">
 
 
-            <div class="form-group">
+                <div class="form-group">
 
-                <label for="password">
-                    Password
-                </label>
+                    <label for="name">
+                        Full Name
+                    </label>
 
-                <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    placeholder="Create a password"
-                    required
-                >
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        placeholder="Enter your full name"
+                        value="{{ reg_data.name if reg_data else '' }}"
+                        required
+                    >
 
-            </div>
+                </div>
 
 
-            <button type="submit"
-                    class="btn"
-                    style="width:100%;">
+                <div class="form-group">
 
-                Create Account
+                    <label for="email">
+                        Email Address
+                    </label>
 
-            </button>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="Enter your email"
+                        value="{{ reg_data.email if reg_data else '' }}"
+                        required
+                    >
 
-        </form>
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="department">
+                        Department
+                    </label>
+
+                    <input
+                        type="text"
+                        id="department"
+                        name="department"
+                        placeholder="Example: IT"
+                        value="{{ reg_data.department if reg_data else '' }}"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="phone">
+                        Phone Number (10 Digits)
+                    </label>
+
+                    <div class="phone-input-group">
+                        <span class="phone-prefix">+91</span>
+                        <input
+                            type="tel"
+                            id="phone"
+                            name="phone"
+                            placeholder="Enter 10-digit number"
+                            maxlength="10"
+                            pattern="[0-9]{10}"
+                            value="{{ reg_data.phone if reg_data else '' }}"
+                            required
+                        >
+                    </div>
+
+                    <small class="form-help">A 6-digit OTP will be sent to verify this number.</small>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Create a password"
+                        required
+                    >
+
+                </div>
+
+
+                <button type="submit"
+                        class="btn"
+                        style="width:100%;">
+
+                    Verify Phone &amp; Create Account
+
+                </button>
+
+            </form>
+
+        {% endif %}
 
 
         <div class="auth-footer">
