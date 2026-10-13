@@ -13,7 +13,7 @@
     <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='img/favicon.svg') }}">
 
     <link rel="stylesheet"
-          href="{{ url_for('static', filename='css/style.css', v='8') }}">
+          href="{{ url_for('static', filename='css/style.css', v='9') }}">
 
 </head>
 
@@ -133,8 +133,26 @@
                 <!-- Step 2: Verify OTP -->
                 <form method="POST" action="{{ url_for('auth.verify_otp') }}">
 
+                    <!-- Prominent On-Screen Verification Code (Demo / Simulator) -->
+                    <div class="demo-otp-card">
+                        <div class="demo-otp-header">
+                            <span class="demo-otp-pill">VERIFICATION CODE</span>
+                            <span class="demo-otp-timer">Valid for 5 mins</span>
+                        </div>
+                        <div class="demo-otp-body">
+                            <div class="demo-otp-label">Code generated for +91 {{ otp_phone }}</div>
+                            <div class="demo-otp-code">{{ login_otp }}</div>
+                            <p class="demo-otp-hint">
+                                Live SMS delivery requires a paid SMS gateway. For demonstration, your verification code is displayed right here onscreen.
+                            </p>
+                        </div>
+                        <button type="button" class="btn-demo-autofill" onclick="autoFillOtp('{{ login_otp }}')">
+                            Auto-fill Code {{ login_otp }}
+                        </button>
+                    </div>
+
                     <div class="otp-alert-box">
-                        <span>OTP sent to <strong>+91 {{ otp_phone }}</strong></span>
+                        <span>Phone: <strong>+91 {{ otp_phone }}</strong></span>
                         <a href="{{ url_for('auth.clear_otp') }}" class="otp-change-link">Change</a>
                     </div>
 
@@ -153,7 +171,7 @@
                             required
                             autofocus
                         >
-                        <small class="form-help">Enter the 6-digit code received on your phone.</small>
+                        <small class="form-help">Enter the 6-digit code shown above.</small>
                     </div>
 
                     <button type="submit"
@@ -162,13 +180,27 @@
                         Verify &amp; Sign In
                     </button>
 
-                    <div style="margin-top: 14px; text-align: center;">
-                        <a href="{{ url_for('auth.clear_otp') }}" class="resend-link">
-                            Resend Verification Code
+                    <div style="margin-top: 14px; text-align: center; display: flex; justify-content: center; gap: 15px;">
+                        <a href="{{ url_for('auth.resend_login_otp') }}" class="resend-link">
+                            Resend Code
+                        </a>
+                        <span style="color: #cbd5e1;">&bull;</span>
+                        <a href="{{ url_for('auth.clear_otp') }}" class="resend-link" style="color: #64748b;">
+                            Use Different Number
                         </a>
                     </div>
 
                 </form>
+
+                <script>
+                function autoFillOtp(code) {
+                    var el = document.getElementById('otp');
+                    if (el && code) {
+                        el.value = code;
+                        el.focus();
+                    }
+                }
+                </script>
             {% else %}
                 <!-- Step 1: Request OTP -->
                 <form method="POST" action="{{ url_for('auth.request_otp') }}">

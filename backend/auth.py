@@ -86,10 +86,11 @@ def register():
 
     step = request.args.get("step")
     reg_data = session.get("reg_data")
-    if step == "verify" and (not reg_data or not session.get("reg_otp")):
+    reg_otp = session.get("reg_otp")
+    if step == "verify" and (not reg_data or not reg_otp):
         step = None
 
-    return render_template("register.html", step=step, reg_data=reg_data)
+    return render_template("register.html", step=step, reg_data=reg_data, reg_otp=reg_otp)
 
 
 @auth.route("/register/verify-otp", methods=["POST"])
@@ -207,7 +208,8 @@ def login():
         "login.html",
         active_tab=active_tab,
         has_active_otp=has_active_otp,
-        otp_phone=otp_phone
+        otp_phone=otp_phone,
+        login_otp=session.get("login_otp")
     )
 
 
@@ -287,6 +289,28 @@ def verify_otp():
     login_user(user)
     flash(f"Welcome back, {user.name}! Signed in successfully via phone verification.", "success")
     return redirect(url_for("dashboard"))
+
+
+@auth.route("/login/phone/resend-otp", methods=["GET"])
+def resend_login_otp():
+    if current_user.is_authenticated:
+        return redirect(url_for("dashboard"))
+
+    phone_digits = session.get("login_phone")
+    user_id = session.get("login_user_id")
+
+    if not phone_digits or not user_id:
+        flash("No active OTP request found. Please enter your phone number.", "error")
+        return redirect(url_for("auth.login", tab="phone"))
+
+    otp = f"{secrets.randbelow(900000) + 100000}"
+    expiry = (datetime.now(timezone.utc) + timedelta(minutes=5)).timestamp()
+
+    session["login_otp"] = otp
+    session["login_otp_expiry"] = expiry
+
+    flash(f"New verification code sent for {phone_digits}: {otp} (Valid for 5 minutes).", "info")
+    return redirect(url_for("auth.login", tab="phone"))
 
 
 @auth.route("/login/phone/clear", methods=["GET"])

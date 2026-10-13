@@ -673,6 +673,15 @@ textarea {
 }
 
 
+.flash-info {
+    background: #eff6ff;
+
+    color: #1e40af;
+
+    border: 1px solid #bfdbfe;
+}
+
+
 /* =========================================================
    TABLES
    ========================================================= */
@@ -2575,6 +2584,94 @@ textarea:focus {
     padding: 11px 14px !important;
     font-size: 0.95rem;
     flex: 1;
+}
+
+
+/* =========================================================
+   DEMO / SIMULATED OTP CARD
+   ========================================================= */
+
+.demo-otp-card {
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+    border: 2px dashed #2563eb;
+    border-radius: 12px;
+    padding: 16px 14px;
+    margin-bottom: 18px;
+    text-align: center;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.08);
+}
+
+.demo-otp-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.demo-otp-pill {
+    background: #1e3a8a;
+    color: #ffffff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 3px 9px;
+    border-radius: 9999px;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+}
+
+.demo-otp-timer {
+    font-size: 0.75rem;
+    color: #475569;
+    font-weight: 600;
+}
+
+.demo-otp-label {
+    font-size: 0.84rem;
+    color: #1e3a8a;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.demo-otp-code {
+    font-size: 2.2rem;
+    font-weight: 800;
+    letter-spacing: 8px;
+    color: #1e3a8a;
+    background: #ffffff;
+    border: 1.5px solid #bfdbfe;
+    border-radius: 8px;
+    padding: 8px 14px;
+    margin: 6px 0;
+    font-family: 'Courier New', Courier, monospace;
+    user-select: all;
+    display: inline-block;
+    min-width: 200px;
+}
+
+.demo-otp-hint {
+    font-size: 0.78rem;
+    color: #475569;
+    margin: 6px 0 0;
+    line-height: 1.4;
+}
+
+.btn-demo-autofill {
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 9px 14px;
+    font-size: 0.86rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 10px;
+    width: 100%;
+    transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.btn-demo-autofill:hover {
+    background: #1d4ed8;
+    transform: translateY(-1px);
 }
 
 .otp-alert-box {
