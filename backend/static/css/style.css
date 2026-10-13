@@ -2354,7 +2354,7 @@ textarea:focus {
     position: absolute;
     top: calc(100% + 12px);
     right: 0;
-    width: 290px;
+    width: 330px;
     background: #ffffff;
     color: #172033;
     border-radius: 16px;
@@ -2865,4 +2865,269 @@ textarea:focus {
     margin-top: 22px;
     padding-top: 14px;
     border-top: 1px solid #e2e8f0;
+}
+
+
+/* =========================================================
+   ADMIN DIRECTORY & POPOVER ADMIN TEAM
+   ========================================================= */
+
+.popover-admin-section {
+    margin-top: 10px;
+    padding-top: 4px;
+}
+
+.popover-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.popover-section-title {
+    font-size: 0.74rem;
+    font-weight: 700;
+    color: #1e3a8a;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.popover-view-all-btn {
+    background: none;
+    border: none;
+    font-size: 0.74rem;
+    color: #2563eb;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: underline;
+    padding: 0;
+}
+
+.popover-view-all-btn:hover {
+    color: #1d4ed8;
+}
+
+.popover-admins-scroll {
+    max-height: 180px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    margin-bottom: 6px;
+    padding-right: 3px;
+}
+
+.popover-admins-scroll::-webkit-scrollbar {
+    width: 4px;
+}
+
+.popover-admins-scroll::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+}
+
+.popover-admin-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    padding: 7px 9px;
+    border-radius: 8px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    transition: background 0.18s ease, border-color 0.18s ease;
+}
+
+.popover-admin-row:hover {
+    background: #eff6ff;
+    border-color: #bfdbfe;
+}
+
+.popover-admin-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #1e3a8a;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.78rem;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.popover-admin-details {
+    flex: 1;
+    min-width: 0;
+}
+
+.popover-admin-name {
+    font-size: 0.84rem;
+    font-weight: 700;
+    color: #0f172a;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.popover-admin-meta {
+    font-size: 0.74rem;
+    color: #64748b;
+    margin-top: 1px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.popover-admin-phone {
+    font-size: 0.73rem;
+    margin-top: 2px;
+}
+
+.popover-phone-link {
+    color: #2563eb;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.popover-phone-link:hover {
+    text-decoration: underline;
+}
+
+.popover-no-phone {
+    color: #94a3b8;
+    font-style: italic;
+}
+
+.popover-link {
+    color: #2563eb;
+    text-decoration: none;
+}
+
+.popover-link:hover {
+    text-decoration: underline;
+}
+
+.badge-you {
+    background: #dcfce7;
+    color: #166534;
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 9999px;
+    border: 1px solid #bbf7d0;
+}
+
+/* Admin Directory Modal list */
+.admin-directory-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 420px;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+.admin-directory-list::-webkit-scrollbar {
+    width: 5px;
+}
+
+.admin-directory-list::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+}
+
+.admin-directory-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 14px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    gap: 12px;
+    transition: background 0.15s ease;
+}
+
+.admin-directory-card:hover {
+    background: #f1f5f9;
+}
+
+.current-admin-card {
+    background: #eff6ff;
+    border-color: #bfdbfe;
+}
+
+.admin-dir-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 170px;
+}
+
+.admin-dir-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #1e3a8a;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.95rem;
+    flex-shrink: 0;
+}
+
+.admin-dir-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.admin-dir-name {
+    font-size: 0.92rem;
+    color: #0f172a;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.admin-dir-dept {
+    font-size: 0.78rem;
+    color: #64748b;
+}
+
+.admin-dir-contact {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    align-items: flex-end;
+}
+
+.admin-dir-link {
+    font-size: 0.82rem;
+    color: #2563eb;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.admin-dir-link.phone {
+    color: #1e3a8a;
+}
+
+.admin-dir-link:hover {
+    text-decoration: underline;
+}
+
+.admin-dir-no-phone {
+    font-size: 0.76rem;
+    color: #94a3b8;
+    font-style: italic;
 }

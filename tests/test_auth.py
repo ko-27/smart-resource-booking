@@ -283,3 +283,34 @@ def test_registration_with_phone_otp_verification(client, app):
         assert new_user.phone == "9811223344"
         assert new_user.department == "ECE"
         assert new_user.check_password("SecurePassword@1")
+
+def test_admin_can_view_other_admins_in_profile(client, app):
+    with app.app_context():
+        admin1 = User(name="Admin One", email="admin1@example.com", department="IT", phone="9876543211", role="ADMIN")
+        admin1.set_password("Admin@123")
+        admin2 = User(name="Admin Two", email="admin2@example.com", department="CSE", phone="9876543212", role="ADMIN")
+        admin2.set_password("Admin@123")
+        user1 = User(name="Regular User", email="user1@example.com", department="MECH", phone="9876543213", role="USER")
+        user1.set_password("User@123")
+        db.session.add_all([admin1, admin2, user1])
+        db.session.commit()
+
+    # Login as admin1
+    client.post("/login", data={"email": "admin1@example.com", "password": "Admin@123"}, follow_redirects=True)
+    resp = client.get("/dashboard")
+    assert resp.status_code == 200
+    html = resp.data.decode("utf-8")
+    assert "Admin Colleagues" in html
+    assert "Admin Two" in html
+    assert "admin2@example.com" in html
+    assert "All Administrators" in html
+    assert "adminDirectoryModal" in html
+
+    # Logout and login as regular user
+    client.get("/logout")
+    client.post("/login", data={"email": "user1@example.com", "password": "User@123"}, follow_redirects=True)
+    resp2 = client.get("/dashboard")
+    assert resp2.status_code == 200
+    html2 = resp2.data.decode("utf-8")
+    assert "Admin Colleagues" not in html2
+    assert "adminDirectoryModal" not in html2

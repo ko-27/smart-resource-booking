@@ -29,6 +29,21 @@ def create_app(test_config=None):
     app.register_blueprint(resources)
     app.register_blueprint(bookings)
 
+    @app.context_processor
+    def inject_admin_context():
+        if current_user.is_authenticated and getattr(current_user, "role", None) == "ADMIN":
+            try:
+                all_admins = User.query.filter_by(role="ADMIN").order_by(User.name.asc()).all()
+                other_admins = [a for a in all_admins if a.id != current_user.id]
+                return {
+                    "all_admins": all_admins,
+                    "other_admins": other_admins
+                }
+            except Exception:
+                db.session.rollback()
+                return {"all_admins": [], "other_admins": []}
+        return {"all_admins": [], "other_admins": []}
+
     # Automatic booking lifecycle scheduler (runs periodically in background)
     start_booking_lifecycle_scheduler(app, interval_seconds=30)
 

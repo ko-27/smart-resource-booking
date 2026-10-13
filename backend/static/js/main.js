@@ -190,6 +190,39 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    // 9. Admin Directory Modal
+    window.openAdminDirectoryModal = function () {
+        const modal = document.getElementById("adminDirectoryModal");
+        if (modal) {
+            modal.style.display = "flex";
+            if (profilePopover) {
+                profilePopover.classList.remove("show");
+                if (profileBtn) profileBtn.setAttribute("aria-expanded", "false");
+            }
+        }
+    };
+
+    window.closeAdminDirectoryModal = function () {
+        const modal = document.getElementById("adminDirectoryModal");
+        if (modal) {
+            modal.style.display = "none";
+        }
+    };
+
+    const adminDirModal = document.getElementById("adminDirectoryModal");
+    if (adminDirModal) {
+        adminDirModal.addEventListener("click", function (event) {
+            if (event.target === adminDirModal) {
+                closeAdminDirectoryModal();
+            }
+        });
+
+        document.addEventListener("keydown", function (event) {
+            if (event.key === "Escape" && adminDirModal.style.display !== "none") {
+                closeAdminDirectoryModal();
+            }
+        });
+    }
 });
 
 // Global login tab switch function

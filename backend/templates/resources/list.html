@@ -82,6 +82,52 @@
                     </div>
                 </div>
 
+                                {% if current_user.role == 'ADMIN' %}
+                <div class="popover-divider"></div>
+
+                <div class="popover-admin-section">
+                    <div class="popover-section-header">
+                        <span class="popover-section-title">Admin Colleagues ({{ other_admins|length }})</span>
+                        {% if other_admins %}
+                        <button type="button" class="popover-view-all-btn" onclick="openAdminDirectoryModal()">View All</button>
+                        {% endif %}
+                    </div>
+
+                    {% if other_admins %}
+                    <div class="popover-admins-scroll">
+                        {% for adm in other_admins %}
+                        <div class="popover-admin-row">
+                            <div class="popover-admin-avatar">{{ adm.name[:1] | upper }}</div>
+                            <div class="popover-admin-details">
+                                <div class="popover-admin-name">
+                                    <span>{{ adm.name }}</span>
+                                    <span class="badge" style="font-size: 0.65rem; padding: 1px 5px;">{{ adm.department }}</span>
+                                </div>
+                                <div class="popover-admin-meta">
+                                    <a href="mailto:{{ adm.email }}" class="popover-link" title="{{ adm.email }}">{{ adm.email }}</a>
+                                </div>
+                                <div class="popover-admin-phone">
+                                    {% if adm.phone %}
+                                        <a href="tel:+91{{ adm.phone }}" class="popover-phone-link">
+                                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                                            +91 {{ adm.phone }}
+                                        </a>
+                                    {% else %}
+                                        <span class="popover-no-phone">Phone not set</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div style="font-size: 0.8rem; color: #94a3b8; font-style: italic; padding: 4px 0;">
+                        No other administrators registered yet.
+                    </div>
+                    {% endif %}
+                </div>
+                {% endif %}
+
                 <div class="popover-divider"></div>
 
                 <div class="popover-actions">
@@ -89,6 +135,12 @@
                         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 5px;"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
                         Edit Contact Details
                     </button>
+                    {% if current_user.role == 'ADMIN' %}
+                    <button type="button" class="btn btn-secondary btn-small" onclick="openAdminDirectoryModal()" style="width: 100%; margin-bottom: 8px;">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 5px;"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                        All Administrators ({{ all_admins|length }})
+                    </button>
+                    {% endif %}
                     <a href="{{ url_for('auth.logout') }}" class="btn btn-secondary btn-small" style="width: 100%;">
                         Sign Out
                     </a>
@@ -588,7 +640,66 @@
             </div>
         </form>
     </div>
+</div
+
+{% if current_user.role == 'ADMIN' %}
+<!-- Administrators Directory Modal -->
+<div class="contact-modal-backdrop" id="adminDirectoryModal" role="dialog" aria-modal="true" style="display: none;">
+    <div class="contact-modal-card" style="max-width: 560px; width: 92%;">
+        <div class="contact-modal-header">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <div class="popover-avatar-lg" style="background: #1e3a8a; width: 36px; height: 36px; font-size: 0.95rem;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                </div>
+                <div>
+                    <h3 style="margin: 0; font-size: 1.15rem; color: #0f172a;">Institutional Administrators</h3>
+                    <small style="color: #64748b;">All system administrators and contact details</small>
+                </div>
+            </div>
+            <button type="button" class="contact-modal-close" onclick="closeAdminDirectoryModal()">&times;</button>
+        </div>
+
+        <div class="admin-directory-list">
+            {% for adm in all_admins %}
+            <div class="admin-directory-card {% if adm.id == current_user.id %}current-admin-card{% endif %}">
+                <div class="admin-dir-left">
+                    <div class="admin-dir-avatar">{{ adm.name[:1] | upper }}</div>
+                    <div class="admin-dir-info">
+                        <div class="admin-dir-name">
+                            <strong>{{ adm.name }}</strong>
+                            {% if adm.id == current_user.id %}
+                                <span class="badge-you">You</span>
+                            {% endif %}
+                            <span class="badge" style="font-size: 0.68rem; padding: 2px 7px;">ADMIN</span>
+                        </div>
+                        <div class="admin-dir-dept">{{ adm.department }}</div>
+                    </div>
+                </div>
+                <div class="admin-dir-contact">
+                    <a href="mailto:{{ adm.email }}" class="admin-dir-link" title="Send Email">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                        {{ adm.email }}
+                    </a>
+                    {% if adm.phone %}
+                    <a href="tel:+91{{ adm.phone }}" class="admin-dir-link phone" title="Call or Message">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                        +91 {{ adm.phone }}
+                    </a>
+                    {% else %}
+                    <span class="admin-dir-no-phone">Phone not registered</span>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="modal-button-row" style="margin-top: 18px;">
+            <button type="button" class="btn btn-secondary" onclick="closeAdminDirectoryModal()">Close</button>
+        </div>
+    </div>
 </div>
+{% endif %}
+>
 
 <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 
